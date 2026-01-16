@@ -11,6 +11,9 @@
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <!-- Custom -->
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
 </head>
@@ -110,19 +113,37 @@
                 </button>
 
             <div class="dropdown">
-                <a class="dropdown-toggle text-decoration-none" href="#" data-bs-toggle="dropdown">
-                    <strong>{{ Auth::user()->name }}</strong><br>
-                    <small class="text-muted">Super Admin</small>
+                <a class="dropdown-toggle text-decoration-none d-flex align-items-center gap-2" 
+                href="#" data-bs-toggle="dropdown">
+
+                    {{-- Avatar --}}
+                    @if(Auth::user()->profile_image)
+                        <img src="{{ asset('storage/' . Auth::user()->profile_image) }}"
+                            alt="User"
+                            class="rounded-circle"
+                            width="40" height="40">
+                    @else
+                        <div class="rounded-circle bg-primary text-white d-flex 
+                                    align-items-center justify-content-center"
+                            style="width:40px;height:40px;font-weight:bold;">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </div>
+                    @endif
+
+                    {{-- Name & Role --}}
+                    <div class="text-start">
+                        <strong>{{ Auth::user()->name }}</strong><br>
+                        <small class="text-muted">Super Admin</small>
+                    </div>
                 </a>
+
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
                         <a class="dropdown-item" href="{{ route('profile.edit') }}">
                             <i class="fa fa-user me-2"></i> Profile
                         </a>
                     </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                    <li><hr class="dropdown-divider"></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -133,6 +154,7 @@
                     </li>
                 </ul>
             </div>
+
 
             </div>
         </header>

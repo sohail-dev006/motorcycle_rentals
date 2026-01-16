@@ -4,9 +4,10 @@
 @section('page-title', 'Motorcycle List')
 
 @section('content')
-
 @if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
+    <div class="alert alert-success fade show" id="successAlert">
+        {{ session('success') }}
+    </div>
 @endif
 
 <div class="card border-0 shadow-sm">
@@ -19,14 +20,14 @@
                 <small class="text-muted">Manage your Motorcycles</small>
             </div>
 
-            {{-- <a href="{{ route('admin.motorcycles.create') }}" class="btn btn-warning text-white">
+            <a href="{{ route('motorcycles.create') }}" class="btn btn-warning text-white">
                 <i class="bi bi-plus-circle"></i> Add New Motorcycle
-            </a> --}}
+            </a>
         </div>
 
         {{-- Top Actions --}}
         <div class="d-flex justify-content-between mb-3">
-            {{-- <a href="{{ route('admin.motorcycles.import') }}" class="btn btn-warning text-white">
+            {{-- <a href="{{ route('motorcycles.import') }}" class="btn btn-warning text-white">
                 Import CSV File
             </a> --}}
 
@@ -80,17 +81,17 @@
                             <td>AED {{ number_format($m->price, 2) }}</td>
 
                             <td class="text-center">
-                                {{-- <a href="{{ route('admin.motorcycles.show', $m->id) }}"
+                                <a href="{{ route('motorcycles.show', $m->id) }}"
                                    class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-eye"></i>
                                 </a>
 
-                                <a href="{{ route('admin.motorcycles.edit', $m->id) }}"
+                                <a href="{{ route('motorcycles.edit', $m->id) }}"
                                    class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
-                                </a> --}}
+                                </a>
 
-                                {{-- <form action="{{ route('admin.motorcycles.destroy', $m->id) }}"
+                                <form action="{{ route('motorcycles.destroy', $m->id) }}"
                                       method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
@@ -98,7 +99,7 @@
                                             class="btn btn-sm btn-outline-danger">
                                         <i class="bi bi-trash"></i>
                                     </button>
-                                </form> --}}
+                                </form>
                             </td>
                         </tr>
                     @empty
@@ -120,3 +121,13 @@
     </div>
 </div>
 @endsection
+<script>
+    setTimeout(function () {
+        const alert = document.getElementById('successAlert');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 3000); // 3 seconds
+</script>

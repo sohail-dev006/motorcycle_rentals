@@ -6,7 +6,7 @@
 @section('content')
 
 @if ($errors->any())
-    <div class="alert alert-danger">
+    <div class="alert alert-danger fade show" id="successAlert">
         <ul class="mb-0">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -202,5 +202,14 @@
         previewBox.classList.add('d-none');
         previewImg.src = '';
     }
+
+    setTimeout(function () {
+        const alert = document.getElementById('successAlert');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 3000); // 3 seconds
 </script>
 @endpush
