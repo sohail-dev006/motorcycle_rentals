@@ -57,7 +57,14 @@
                    Add On
                 </a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-plus me-2"></i> Brands</a></li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('brands.index') ? 'active' : '' }}" 
+                  href="{{ route('brands.index') }}">
+                  <i class="fa fa-plus me-2"></i>
+                   Brands
+                </a>
+            </li>
         </ul>
     </div>
 </div>
@@ -101,7 +108,13 @@
                    Add On
                 </a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-plus me-2"></i> Brands</a></li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('brands.index') ? 'active' : '' }}" 
+                  href="{{ route('brands.index') }}">
+                  <i class="fa fa-plus me-2"></i>
+                   Brands
+                </a>
+            </li>
         </ul>
     </aside>
 

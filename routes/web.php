@@ -4,8 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MotorcycleController;
 use App\Http\Controllers\AddOnController;
-
-
+use App\Http\Controllers\BrandController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
@@ -48,9 +47,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/add-on/{add}/edit', [AddOnController::class, 'edit'])->name('add.edit');
     Route::put('/add-on/{add}', [AddOnController::class, 'update'])->name('add.update');
     Route::get('/add-on/{add}', [AddOnController::class, 'show'])->name('add.show');
-
     // Delete add-on
     Route::delete('/add-on/{add}', [AddOnController::class, 'destroy'])->name('add.destroy');
+
+    // Brands 
+    Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('/brands/create', [BrandController::class, 'create'])->name('brands.create');
+    Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
+
+    // Use {brand} consistently
+    Route::get('/brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
+    Route::get('/brands/{brand}', [BrandController::class, 'show'])->name('brands.show');
+    Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
+
+
 });
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Motorcycle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Models\Brand;
 
 
 class MotorcycleController extends Controller
@@ -17,7 +18,8 @@ class MotorcycleController extends Controller
 
     public function create()
     {
-        return view('motorcycles.create');
+        $brands = Brand::all();
+        return view('motorcycles.create', compact('brands'));
     }
 
     public function store(Request $request)
@@ -56,7 +58,8 @@ class MotorcycleController extends Controller
 
     public function edit(Motorcycle $motorcycle)
     {
-        return view('motorcycles.edit', compact('motorcycle'));
+        $brands = Brand::all();
+        return view('motorcycles.edit', compact('motorcycle', 'brands'));
     }
 
     public function update(Request $request, Motorcycle $motorcycle)
@@ -66,7 +69,7 @@ class MotorcycleController extends Controller
             'code' => 'nullable|string|max:50',
             'quantity' => 'nullable|integer|min:0',
             'sort_order' => 'nullable|integer|min:0',
-            'brand_id' => 'nullable|integer',
+            'brand_id' => 'nullable|exists:brands,id',
             'status' => 'required|in:featured,unfeatured',
             'visibility' => 'required|in:show,hide',
             'base_price' => 'required|numeric|min:0',

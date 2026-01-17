@@ -53,10 +53,16 @@
                 @endforeach
 
                 {{-- BRAND --}}
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <label class="form-label">Brand *</label>
+                <div class="col-md-6">
+                    <label class="form-label text-capitalize">Brand*</label>
                     <select name="brand_id" class="form-select">
                         <option value="">Select Brand</option>
+                        @foreach($brands as $brand)
+                            <option value="{{ $brand->id }}"
+                                {{ old('brand_id', $motorcycle->brand_id ?? '') == $brand->id ? 'selected' : '' }}>
+                                {{ $brand->name }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 

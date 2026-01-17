@@ -20,7 +20,7 @@ return new class extends Migration
 
             // Brand
             $table->unsignedBigInteger('brand_id')->nullable();
-
+            
             // Status & Visibility
             $table->enum('status', ['featured', 'unfeatured'])->default('featured');
             $table->enum('visibility', ['show', 'hide'])->default('show');
