@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MotorcycleController;
+use App\Http\Controllers\AddOnController;
 
 
 
@@ -40,6 +41,16 @@ Route::middleware('auth')->group(function () {
 
     // Optional: show single motorcycle
     Route::get('/motorcycles/{motorcycle}', [MotorcycleController::class, 'show'])->name('motorcycles.show');
+
+    Route::get('/add-on', [AddOnController::class, 'index'])->name('add.index');
+    Route::get('/add-on/create', [AddOnController::class, 'create'])->name('add.create');
+    Route::post('/add-on', [AddOnController::class, 'store'])->name('add.store');
+    Route::get('/add-on/{add}/edit', [AddOnController::class, 'edit'])->name('add.edit');
+    Route::put('/add-on/{add}', [AddOnController::class, 'update'])->name('add.update');
+    Route::get('/add-on/{add}', [AddOnController::class, 'show'])->name('add.show');
+
+    // Delete add-on
+    Route::delete('/add-on/{add}', [AddOnController::class, 'destroy'])->name('add.destroy');
 });
 
 

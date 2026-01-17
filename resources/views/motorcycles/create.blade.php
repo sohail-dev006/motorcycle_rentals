@@ -25,7 +25,7 @@
             <h4 class="fw-bold mb-0">New Motorcycle</h4>
             <small class="text-muted">Add new Motorcycle</small>
         </div>
-        <a href="#" class="btn btn-dark rounded-pill px-4">
+        <a href="{{ route('motorcycles.index') }}" class="btn btn-dark rounded-pill px-4">
             ← Back
         </a>
     </div>
@@ -210,6 +210,13 @@
             alert.style.opacity = '0';
             setTimeout(() => alert.remove(), 500);
         }
-    }, 3000); // 3 seconds
+    }, 3000); 
 </script>
 @endpush
+<style>
+.ck-editor__editable {
+    height: 300px;
+    overflow-y: auto;
+}
+
+</style>
