@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Add On List')
-@section('page-title', 'Add On List')
+@section('title', 'Tour List')
+@section('page-title', 'Manage your Tours')
 
 @section('content')
 @if(session('success'))
@@ -16,12 +16,12 @@
         {{-- Header --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h4 class="mb-1">Add On's List</h4>
-                <small class="text-muted">Manage your Add Ons</small>
+                <h4 class="mb-1">Tour List</h4>
+                <small class="text-muted">Manage your Tours</small>
             </div>
 
-            <a href="{{ route('add.create') }}" class="btn btn-warning text-white">
-                <i class="bi bi-plus-circle"></i> Create New Add On
+            <a href="{{ route('tours.create') }}" class="btn btn-warning text-white">
+                <i class="bi bi-plus-circle"></i> Add New Tour
             </a>
         </div>
 
@@ -31,7 +31,7 @@
                    name="search"
                    value="{{ $search ?? '' }}"
                    class="form-control"
-                   placeholder="Search Add On...">
+                   placeholder="Search Tours...">
             <button class="btn btn-outline-secondary">
                 <i class="bi bi-search"></i>
             </button>
@@ -42,43 +42,58 @@
             <table class="table align-middle">
                 <thead class="table-light">
                     <tr>
+                        <th><input type="checkbox"></th>
                         <th>Image</th>
-                        <th>Sub Product</th>
-                        <th>Price</th>
+                        <th>Tour Name</th>
+                        <th>Status</th>
+                        <th>Group Price</th>
+                        <th>Private Price</th>
+                        <th>Passenger Price</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($addons as $add)
+                    @forelse($tours as $tour)
                         <tr>
+                            <td><input type="checkbox"></td>
+
                             <td>
-                                <img src="{{ $add->image
-                                    ? asset('storage/'.$add->image)
+                                <img src="{{ $tour->image
+                                    ? asset('storage/'.$tour->image)
                                     : asset('images/no-image.png') }}"
-                                    width="50" class="rounded">
+                                    width="50"
+                                    class="rounded">
                             </td>
 
-                            <td>{{ $add->name }}</td>
+                            <td>{{ $tour->name }}</td>
 
-                            <td>AED {{ number_format($add->price, 2) }}</td>
+                            <td>
+                                <span class="badge {{ $tour->status === 'featured' ? 'bg-success' : 'bg-secondary' }}">
+                                    {{ ucfirst($tour->status) }}
+                                </span>
+                            </td>
+
+                            <td>AED {{ number_format($tour->group_price, 2) }}</td>
+                            <td>AED {{ number_format($tour->private_price, 2) }}</td>
+                            <td>AED {{ number_format($tour->passenger_price, 2) }}</td>
 
                             <td class="text-center">
-                                <a href="{{ route('add.show', $add->id) }}"
+                                <a href="{{ route('tours.show', $tour->id) }}"
                                    class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-eye"></i>
                                 </a>
 
-                                <a href="{{ route('add.edit', $add->id) }}"
+                                <a href="{{ route('tours.edit', $tour->id) }}"
                                    class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
-                                <form action="{{ route('add.destroy', $add->id) }}"
+                                <form action="{{ route('tours.destroy', $tour->id) }}"
                                       method="POST"
                                       class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button onclick="return confirm('Delete this Add On?')"
+                                    <button onclick="return confirm('Delete this tour?')"
                                             class="btn btn-sm btn-outline-danger">
                                         <i class="bi bi-trash"></i>
                                     </button>
@@ -87,8 +102,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted">
-                                No Add On found
+                            <td colspan="8" class="text-center text-muted">
+                                No tours found
                             </td>
                         </tr>
                     @endforelse
@@ -98,42 +113,48 @@
 
         {{-- CARD VIEW (sm and below) --}}
         <div class="d-block d-md-none">
-            @forelse($addons as $add)
+            @forelse($tours as $tour)
                 <div class="card mb-2 shadow-sm">
                     <div class="card-body p-3">
 
-                        <div class="d-flex align-items-center gap-3 mb-2">
-                            <img src="{{ $add->image
-                                ? asset('storage/'.$add->image)
+                        <div class="d-flex gap-3 mb-2">
+                            <img src="{{ $tour->image
+                                ? asset('storage/'.$tour->image)
                                 : asset('images/no-image.png') }}"
-                                width="60"
+                                width="70"
                                 class="rounded">
 
-                            <div>
-                                <h6 class="mb-1">{{ $add->name }}</h6>
-                                <span class="text-muted">
-                                    AED {{ number_format($add->price, 2) }}
+                            <div class="mt-1">
+                                <h6 class="mb-1">{{ $tour->name }}</h6>
+                                <span class="badge {{ $tour->status === 'featured' ? 'bg-success' : 'bg-secondary' }}">
+                                    {{ ucfirst($tour->status) }}
                                 </span>
                             </div>
                         </div>
 
+                        <div class="small text-muted mb-2">
+                            <div>Group: AED {{ number_format($tour->group_price, 2) }}</div>
+                            <div>Private: AED {{ number_format($tour->private_price, 2) }}</div>
+                            <div>Passenger: AED {{ number_format($tour->passenger_price, 2) }}</div>
+                        </div>
+
                         <div class="d-flex gap-2">
-                            <a href="{{ route('add.show', $add->id) }}"
+                            <a href="{{ route('tours.show', $tour->id) }}"
                                class="btn btn-sm btn-outline-secondary flex-fill">
                                 <i class="bi bi-eye"></i> View
                             </a>
 
-                            <a href="{{ route('add.edit', $add->id) }}"
+                            <a href="{{ route('tours.edit', $tour->id) }}"
                                class="btn btn-sm btn-outline-primary flex-fill">
                                 <i class="bi bi-pencil"></i> Edit
                             </a>
 
-                            <form action="{{ route('add.destroy', $add->id) }}"
+                            <form action="{{ route('tours.destroy', $tour->id) }}"
                                   method="POST"
                                   class="flex-fill">
                                 @csrf
                                 @method('DELETE')
-                                <button onclick="return confirm('Delete this Add On?')"
+                                <button onclick="return confirm('Delete this tour?')"
                                         class="btn btn-sm btn-outline-danger w-100">
                                     <i class="bi bi-trash"></i> Delete
                                 </button>
@@ -143,20 +164,27 @@
                     </div>
                 </div>
             @empty
-                <p class="text-center text-muted">No Add On found</p>
+                <p class="text-center text-muted">No tours found</p>
             @endforelse
+        </div>
+
+        {{-- Pagination --}}
+       
+        <div class="mt-3">
+            {{ $tours->links() }}
         </div>
 
     </div>
 </div>
-
-@push('scripts')
-<script>
-    setTimeout(() => {
-        const alert = document.getElementById('successAlert');
-        if (alert) alert.remove();
-    }, 3000);
-</script>
-@endpush
-
 @endsection
+
+<script>
+setTimeout(function () {
+    const alert = document.getElementById('successAlert');
+    if (alert) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }
+}, 3000); // 3 seconds
+</script>

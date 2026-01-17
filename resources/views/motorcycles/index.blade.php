@@ -25,19 +25,8 @@
             </a>
         </div>
 
-        {{-- Top Actions --}}
-        <div class="d-flex justify-content-between mb-3">
-            {{-- <a href="{{ route('motorcycles.import') }}" class="btn btn-warning text-white">
-                Import CSV File
-            </a> --}}
-
-            <button class="btn btn-outline-secondary">
-                <i class="bi bi-funnel"></i>
-            </button>
-        </div>
-
-        {{-- Table --}}
-        <div class="table-responsive">
+        {{-- Table for md and up --}}
+        <div class="table-responsive d-none d-md-block">
             <table class="table align-middle">
                 <thead class="table-light">
                     <tr>
@@ -56,47 +45,28 @@
                     @forelse($motorcycles as $m)
                         <tr>
                             <td><input type="checkbox"></td>
-
                             <td>
-                                <img src="{{ $m->image
-                                    ? asset('storage/' . $m->image)
-                                    : asset('images/no-image.png') }}"
-                                    width="50"
-                                    class="rounded">
+                                <img src="{{ $m->image ? asset('storage/' . $m->image) : asset('images/no-image.png') }}"
+                                     width="50" class="rounded">
                             </td>
-
-
                             <td>{{ $m->name }}</td>
-
                             <td>{{ $m->code }}</td>
-
                             <td>{{ $m->sort_order }}</td>
-
                             <td>
-                                <span class="badge bg-success">
-                                    {{ ucfirst($m->status) }}
-                                </span>
+                                <span class="badge bg-success">{{ ucfirst($m->status) }}</span>
                             </td>
-
                             <td>AED {{ number_format($m->price, 2) }}</td>
-
                             <td class="text-center">
-                                <a href="{{ route('motorcycles.show', $m->id) }}"
-                                   class="btn btn-sm btn-outline-secondary">
+                                <a href="{{ route('motorcycles.show', $m->id) }}" class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-eye"></i>
                                 </a>
-
-                                <a href="{{ route('motorcycles.edit', $m->id) }}"
-                                   class="btn btn-sm btn-outline-primary">
+                                <a href="{{ route('motorcycles.edit', $m->id) }}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-
-                                <form action="{{ route('motorcycles.destroy', $m->id) }}"
-                                      method="POST" class="d-inline">
+                                <form action="{{ route('motorcycles.destroy', $m->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button onclick="return confirm('Delete this motorcycle?')"
-                                            class="btn btn-sm btn-outline-danger">
+                                    <button onclick="return confirm('Delete this motorcycle?')" class="btn btn-sm btn-outline-danger">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
@@ -104,13 +74,52 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted">
-                                No motorcycles found
-                            </td>
+                            <td colspan="8" class="text-center text-muted">No motorcycles found</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        {{-- Card view for small screens --}}
+        <div class="d-block d-md-none">
+            @forelse($motorcycles as $m)
+                <div class="card mb-3 shadow-sm">
+                    <div class="row g-0">
+                        <div class="col-4">
+                            <img src="{{ $m->image ? asset('storage/' . $m->image) : asset('images/no-image.png') }}"
+                                 class="img-fluid rounded-start" alt="{{ $m->name }}">
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body p-2">
+                                <h5 class="card-title mb-1">{{ $m->name }}</h5>
+                                <p class="mb-1"><strong>Code:</strong> {{ $m->code }}</p>
+                                <p class="mb-1"><strong>Sort Order:</strong> {{ $m->sort_order }}</p>
+                                <p class="mb-1"><strong>Status:</strong> <span class="badge bg-success">{{ ucfirst($m->status) }}</span></p>
+                                <p class="mb-1"><strong>Price:</strong> AED {{ number_format($m->price, 2) }}</p>
+
+                                <div class="d-flex gap-1 mt-2">
+                                    <a href="{{ route('motorcycles.show', $m->id) }}" class="btn btn-sm btn-outline-secondary flex-fill">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+                                    <a href="{{ route('motorcycles.edit', $m->id) }}" class="btn btn-sm btn-outline-primary flex-fill">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <form action="{{ route('motorcycles.destroy', $m->id) }}" method="POST" class="flex-fill">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Delete this motorcycle?')" class="btn btn-sm btn-outline-danger w-100">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <p class="text-center text-muted">No motorcycles found</p>
+            @endforelse
         </div>
 
         {{-- Pagination --}}
@@ -120,14 +129,16 @@
 
     </div>
 </div>
+
 @endsection
+
 <script>
-    setTimeout(function () {
-        const alert = document.getElementById('successAlert');
-        if (alert) {
-            alert.style.transition = 'opacity 0.5s';
-            alert.style.opacity = '0';
-            setTimeout(() => alert.remove(), 500);
-        }
-    }, 3000); // 3 seconds
+setTimeout(function () {
+    const alert = document.getElementById('successAlert');
+    if (alert) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }
+}, 3000);
 </script>

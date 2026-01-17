@@ -65,6 +65,23 @@
                    Brands
                 </a>
             </li>
+
+                        {{-- Tours --}}
+            <li class="nav-item mt-3 fw-semibold text-muted">Tours</li>
+
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('tours.index') ? 'active' : '' }}" 
+                   href="{{ route('tours.index') }}">
+                    <i class="fa fa-map-marked-alt me-2"></i> Tours
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
+                   href="{{ route('tours.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Add Tour
+                </a>
+            </li>
         </ul>
     </div>
 </div>
@@ -115,6 +132,25 @@
                    Brands
                 </a>
             </li>
+
+            {{-- Tours --}}
+            <li class="nav-item mt-3 fw-semibold text-muted">Tours</li>
+
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('tours.index') ? 'active' : '' }}" 
+                   href="{{ route('tours.index') }}">
+                    <i class="fa fa-map-marked-alt me-2"></i> Tours
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
+                   href="{{ route('tours.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Add Tour
+                </a>
+            </li>
+
+
         </ul>
     </aside>
 

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MotorcycleController;
 use App\Http\Controllers\AddOnController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\TourController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
@@ -60,6 +61,19 @@ Route::middleware('auth')->group(function () {
     Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
     Route::get('/brands/{brand}', [BrandController::class, 'show'])->name('brands.show');
     Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
+
+
+
+    // Tours
+    Route::get('/tours', [TourController::class, 'index'])->name('tours.index');
+    Route::get('/tours/create', [TourController::class, 'create'])->name('tours.create');
+    Route::post('/tours', [TourController::class, 'store'])->name('tours.store');
+
+    Route::get('/tours/{tour}/edit', [TourController::class, 'edit'])->name('tours.edit');
+    Route::put('/tours/{tour}', [TourController::class, 'update'])->name('tours.update');
+    Route::get('/tours/{tour}', [TourController::class, 'show'])->name('tours.show');
+    Route::delete('/tours/{tour}', [TourController::class, 'destroy'])->name('tours.destroy');
+
 
 
 });

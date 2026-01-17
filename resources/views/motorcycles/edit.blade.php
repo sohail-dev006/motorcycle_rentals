@@ -250,3 +250,9 @@
     });
 </script>
 @endpush
+<style>
+.ck-editor__editable {
+    height: 300px;
+    overflow-y: auto;
+}
+</style>

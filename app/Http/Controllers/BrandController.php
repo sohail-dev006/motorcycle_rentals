@@ -7,11 +7,20 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $brands = Brand::latest()->paginate(10);
-        return view('brands.index', compact('brands'));
+        $search = $request->search;
+
+        $brands = Brand::when($search, function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%");
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString(); 
+
+        return view('brands.index', compact('brands', 'search'));
     }
+
 
     public function create()
     {
