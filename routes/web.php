@@ -7,11 +7,12 @@ use App\Http\Controllers\AddOnController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MotorcycleBookingController;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+  Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
 });
 
@@ -84,6 +85,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
     Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+
+
+    // motors booking
+    Route::get('/bookings', [MotorcycleBookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/create', [MotorcycleBookingController::class, 'create'])->name('bookings.create');
+    Route::post('/bookings', [MotorcycleBookingController::class, 'store'])->name('bookings.store');
+    Route::get('/bookings/{booking}/edit', [MotorcycleBookingController::class, 'edit'])->name('bookings.edit');
+    Route::put('/bookings/{booking}', [MotorcycleBookingController::class, 'update'])->name('bookings.update');
+    Route::get('/bookings/{booking}', [MotorcycleBookingController::class, 'show'])->name('bookings.show');
+    Route::delete('/bookings/{booking}', [MotorcycleBookingController::class, 'destroy'])->name('bookings.destroy');
 
 });
 

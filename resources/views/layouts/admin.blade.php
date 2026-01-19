@@ -87,15 +87,15 @@
             <li class="nav-item mt-3 fw-semibold text-muted">Bookings</li>
 
             <li class="nav-item ">
-                <a class="nav-link {{ request()->routeIs('tours.index') ? 'active' : '' }}" 
-                   href="{{ route('tours.index') }}">
+                <a class="nav-link {{ request()->routeIs('bookings.index') ? 'active' : '' }}" 
+                   href="{{ route('bookings.index') }}">
                     <i class="fa fa-map-marked-alt me-2"></i> Motorcycle Bookings
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
-                   href="{{ route('tours.create') }}">
+                <a class="nav-link {{ request()->routeIs('bookings.create') ? 'active' : '' }}" 
+                   href="{{ route('bookings.create') }}">
                     <i class="fa fa-plus-circle me-2"></i> Add Motorcycle Bookings
                 </a>
             </li>
@@ -203,15 +203,15 @@
             <li class="nav-item mt-3 fw-semibold text-muted">Bookings</li>
 
             <li class="nav-item ">
-                <a class="nav-link {{ request()->routeIs('tours.index') ? 'active' : '' }}" 
-                   href="{{ route('tours.index') }}">
+                <a class="nav-link {{ request()->routeIs('bookings.index') ? 'active' : '' }}" 
+                   href="{{ route('bookings.index') }}">
                     <i class="fa fa-map-marked-alt me-2"></i> Motorcycle Bookings
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
-                   href="{{ route('tours.create') }}">
+                <a class="nav-link {{ request()->routeIs('bookings.create') ? 'active' : '' }}" 
+                   href="{{ route('bookings.create') }}">
                     <i class="fa fa-plus-circle me-2"></i> Add Motorcycle Bookings
                 </a>
             </li>
