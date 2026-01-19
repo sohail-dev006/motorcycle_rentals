@@ -82,6 +82,55 @@
                     <i class="fa fa-plus-circle me-2"></i> Add Tour
                 </a>
             </li>
+
+            {{-- Booking --}}
+            <li class="nav-item mt-3 fw-semibold text-muted">Bookings</li>
+
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('tours.index') ? 'active' : '' }}" 
+                   href="{{ route('tours.index') }}">
+                    <i class="fa fa-map-marked-alt me-2"></i> Motorcycle Bookings
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
+                   href="{{ route('tours.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Add Motorcycle Bookings
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
+                   href="{{ route('tours.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Tour Bookings
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
+                   href="{{ route('tours.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Add Tour Bookings
+                </a>
+            </li>
+
+            {{-- People --}}
+
+            <li class="nav-item mt-3 fw-semibold text-muted">Peoples</li>
+
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" 
+                   href="{{ route('customers.index') }}">
+                    <i class="fa fa-map-marked-alt me-2"></i> Customers
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" 
+                   href="{{ route('customers.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Add Customers
+                </a>
+            </li>
         </ul>
     </div>
 </div>
@@ -147,6 +196,56 @@
                 <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
                    href="{{ route('tours.create') }}">
                     <i class="fa fa-plus-circle me-2"></i> Add Tour
+                </a>
+            </li>
+
+                        {{-- Booking --}}
+            <li class="nav-item mt-3 fw-semibold text-muted">Bookings</li>
+
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('tours.index') ? 'active' : '' }}" 
+                   href="{{ route('tours.index') }}">
+                    <i class="fa fa-map-marked-alt me-2"></i> Motorcycle Bookings
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
+                   href="{{ route('tours.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Add Motorcycle Bookings
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
+                   href="{{ route('tours.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Tour Bookings
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
+                   href="{{ route('tours.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Add Tour Bookings
+                </a>
+            </li>
+
+
+                        {{-- People --}}
+
+            <li class="nav-item mt-3 fw-semibold text-muted">Peoples</li>
+
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" 
+                   href="{{ route('customers.index') }}">
+                    <i class="fa fa-map-marked-alt me-2"></i> Customers
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" 
+                   href="{{ route('customers.create') }}">
+                    <i class="fa fa-plus-circle me-2"></i> Add Customers
                 </a>
             </li>
 
