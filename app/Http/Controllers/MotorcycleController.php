@@ -26,56 +26,126 @@ class MotorcycleController extends Controller
         $motorcycles = $query->paginate(10)->withQueryString();
         return view('motorcycles.index', compact('motorcycles'));
     }
-
     public function import(Request $request)
     {
+        // Validate file
         $request->validate([
-            'file' => 'required|mimes:csv,txt',
+            'file' => 'required|mimes:csv,txt'
         ]);
 
         $file = $request->file('file');
-        $csvData = file_get_contents($file);
-        $lines = explode(PHP_EOL, $csvData);
-        $header = null;
+        $path = $file->getRealPath();
 
-        foreach ($lines as $key => $line) {
-            $data = str_getcsv($line);
+        if (($handle = fopen($path, 'r')) !== FALSE) {
+            
+            $header = fgetcsv($handle, 1000, ",");
 
-            if ($key === 0) {
-                $header = $data; 
-                continue;
-            }
+        
+            $header = array_map(fn($h) => strtolower(trim($h)), $header);
 
-            if (count($data) === count($header)) {
-                $row = array_combine($header, $data);
+            while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if (count($row) !== count($header)) {
+                    continue;
+                }
 
+                
+                $data = array_combine($header, $row);
+
+                
+                if (empty($data['name'])) {
+                    continue;
+                }
+
+                
+                $slug = Str::slug($data['name']);
+                $originalSlug = $slug;
+                $i = 1;
+                while (Motorcycle::where('slug', $slug)->exists()) {
+                    $slug = $originalSlug . '-' . $i;
+                    $i++;
+                }
+
+               
                 $imagePath = null;
-                if (!empty($row['image_url'])) {
+                if (!empty($data['image_url'])) {
                     try {
-                        $imageContents = file_get_contents($row['image_url']);
-                        $imageName = Str::random(20) . '.' . pathinfo($row['image_url'], PATHINFO_EXTENSION);
+                        $imageContents = file_get_contents($data['image_url']);
+                        $imageName = Str::random(20) . '.' . pathinfo($data['image_url'], PATHINFO_EXTENSION);
                         Storage::disk('public')->put('motorcycles/' . $imageName, $imageContents);
                         $imagePath = 'motorcycles/' . $imageName;
                     } catch (\Exception $e) {
-                        
-                        $imagePath = null;
+                        $imagePath = null; 
                     }
                 }
 
-                // Create Motorcycle
+
                 Motorcycle::create([
-                    'name' => $row['name'] ?? null,
-                    'code' => $row['code'] ?? null,
-                    'sort_order' => $row['sort_order'] ?? 0,
-                    'status' => $row['status'] ?? 'active',
-                    'price' => $row['price'] ?? 0,
+                    'name' => $data['name'],
+                    'code' => $data['code'] ?? null,
+                    'sort_order' => $data['sort_order'] ?? 0,
+                    'status' => $data['status'] ?? 'active',
+                    'price' => $data['price'] ?? 0,
+                    'slug' => $slug,
                     'image' => $imagePath,
                 ]);
             }
+
+            fclose($handle);
         }
 
-        return redirect()->back()->with('success', 'Motorcycles imported successfully!');
+        return redirect()->back()->with('success', 'CSV imported successfully! Motorcycles added.');
     }
+
+
+    // public function import(Request $request)
+    // {
+        // $request->validate([
+        //     'file' => 'required|mimes:csv,txt',
+        // ]);
+
+        // $file = $request->file('file');
+        // $csvData = file_get_contents($file);
+        // $lines = explode(PHP_EOL, $csvData);
+        // $header = null;
+
+        // foreach ($lines as $key => $line) {
+        //     $data = str_getcsv($line);
+
+        //     if ($key === 0) {
+        //         $header = $data; 
+        //         continue;
+        //     }
+
+        //     if (count($data) === count($header)) {
+        //         $row = array_combine($header, $data);
+
+        //         $imagePath = null;
+        //         if (!empty($row['image_url'])) {
+        //             try {
+        //                 $imageContents = file_get_contents($row['image_url']);
+        //                 $imageName = Str::random(20) . '.' . pathinfo($row['image_url'], PATHINFO_EXTENSION);
+        //                 Storage::disk('public')->put('motorcycles/' . $imageName, $imageContents);
+        //                 $imagePath = 'motorcycles/' . $imageName;
+        //             } catch (\Exception $e) {
+                        
+        //                 $imagePath = null;
+        //             }
+        //         }
+
+    //             // Create Motorcycle
+                // Motorcycle::create([
+                //     'name' => $row['name'] ?? null,
+                //     'code' => $row['code'] ?? null,
+                //     'sort_order' => $row['sort_order'] ?? 0,
+                //     'status' => $row['status'] ?? 'active',
+                //     'price' => $row['price'] ?? 0,
+                //     'image' => $imagePath,
+                // ]);
+    //         }
+    //     }
+
+    //     return redirect()->back()->with('success', 'Motorcycles imported successfully!');
+    // }
 
 
     public function create()

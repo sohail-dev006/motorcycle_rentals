@@ -7,36 +7,51 @@ use App\Models\TourBooking;
 use App\Models\Customer;
 use App\Models\Tour;
 use App\Models\Motorcycle;
+use App\Models\MotorcycleBooking;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // COUNTS
-        $totalTourBookings = TourBooking::count();
-        $approvedBookings   = TourBooking::where('status','approved')->count();
-        $cancelledBookings  = TourBooking::where('status','cancelled')->count();
-        $dueBookings        = TourBooking::whereDate('pick_date', today())->count();
+        $today = Carbon::today();
 
+        // TOTAL BOOKINGS
+        $totalTourBookings = TourBooking::count();
+        $approvedBookings  = TourBooking::where('status','approved')->count();
+        $pendingBookings   = TourBooking::where('status','pending')->count();
+        $cancelledBookings = TourBooking::where('status','cancelled')->count();
+
+        // DUE BOOKINGS TODAY
+        $dueBookings = TourBooking::whereDate('pick_date', $today)
+            ->whereIn('status', ['approved','pending'])
+            ->count();
+
+        // CUSTOMERS
         $customers = Customer::count();
 
         // MOTORCYCLE AVAILABILITY
         $totalMotorcycles = Motorcycle::count();
 
-        $bookedMotorcycles = TourBooking::whereDate('pick_date', '<=', today())
-            ->whereDate('pick_date', '>=', today())
-            ->where('status','approved')
-            ->distinct('motorcycle_id')
-            ->count('motorcycle_id');
+        $bookedMotorcycleIds = MotorcycleBooking::where('status','!=','cancelled')
+            ->whereDate('pick_date', '<=', $today)
+            ->whereDate('drop_date', '>=', $today)
+            ->pluck('motorcycle_id')
+            ->toArray();
 
+        $bookedMotorcycles   = count($bookedMotorcycleIds);
         $availableMotorcycles = $totalMotorcycles - $bookedMotorcycles;
 
-        // TODAY PICK / DROP
-        $todayPickups = TourBooking::whereDate('pick_date', today())->count();
-        $todayDrops   = TourBooking::whereDate('pick_date', today())->count(); 
+        // TODAY PICKUPS / DROPS
+        $todayPickups = TourBooking::whereDate('pick_date', $today)
+            ->whereIn('status',['approved','pending'])
+            ->count();
 
-        // RECENT BOOKINGS
+        $todayDrops = MotorcycleBooking::whereDate('drop_date', $today)
+            ->whereIn('status',['approved','pending'])
+            ->count();
+
+        // RECENT BOOKINGS (latest 5)
         $recentBookings = TourBooking::with(['motorcycle','customer','tour'])
             ->latest()
             ->take(5)
@@ -45,6 +60,7 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'totalTourBookings',
             'approvedBookings',
+            'pendingBookings',
             'cancelledBookings',
             'dueBookings',
             'customers',

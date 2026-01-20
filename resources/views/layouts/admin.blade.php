@@ -131,6 +131,23 @@
                     <i class="fa fa-plus-circle me-2"></i> Add Customers
                 </a>
             </li>
+
+            {{-- User management --}}
+            <li class="nav-item mt-3 fw-semibold text-muted">User Management</li>
+
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" 
+                   href="{{ route('customers.index') }}">
+                    <i class="fa fa-users me-2"></i> Users
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" 
+                   href="{{ route('customers.create') }}">
+                    <i class="fa fa-user-shield me-2"></i> Roles & Permission
+                </a>
+            </li>
         </ul>
     </div>
 </div>
@@ -246,6 +263,24 @@
                 <a class="nav-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" 
                    href="{{ route('customers.create') }}">
                     <i class="fa fa-plus-circle me-2"></i> Add Customers
+                </a>
+            </li>
+
+
+                        {{-- User management --}}
+            <li class="nav-item mt-3 fw-semibold text-muted">User Management</li>
+
+            <li class="nav-item ">
+                <a class="nav-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" 
+                   href="{{ route('customers.index') }}">
+                    <i class="fa fa-users me-2"></i> Users
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" 
+                   href="{{ route('customers.create') }}">
+                    <i class="fa fa-user-shield me-2"></i> Roles & Permission
                 </a>
             </li>
 

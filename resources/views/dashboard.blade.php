@@ -23,6 +23,13 @@
 
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
+            <small>Pending Bookings</small>
+            <h3 class="fw-bold text-warning">{{ $pendingBookings }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
             <small>Cancelled Bookings</small>
             <h3 class="fw-bold text-danger">{{ $cancelledBookings }}</h3>
         </div>
@@ -31,28 +38,35 @@
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
             <small>Due Bookings Today</small>
-            <h3 class="fw-bold text-warning">{{ $dueBookings }}</h3>
+            <h3 class="fw-bold text-info">{{ $dueBookings }}</h3>
         </div>
     </div>
-</div>
 
-{{-- SECOND ROW --}}
-<div class="row g-3 mb-4">
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
             <small>Customers</small>
             <h3 class="fw-bold">{{ $customers }}</h3>
         </div>
     </div>
+</div>
 
-    <div class="col-md-3">
+{{-- MOTORCYCLES --}}
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3">
+            <small>Total Motorcycles</small>
+            <h3 class="fw-bold">{{ $totalMotorcycles }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
         <div class="card shadow-sm p-3">
             <small>Available Motorcycles</small>
             <h3 class="fw-bold text-success">{{ $availableMotorcycles }}</h3>
         </div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="card shadow-sm p-3">
             <small>Booked Motorcycles</small>
             <h3 class="fw-bold text-danger">{{ $bookedMotorcycles }}</h3>
@@ -62,26 +76,46 @@
 
 {{-- TODAY PICK / DROP --}}
 <div class="row g-3 mb-4">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card shadow-sm p-3">
             <small>Today Pickups</small>
             <h3 class="fw-bold">{{ $todayPickups }}</h3>
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card shadow-sm p-3">
             <small>Today Drops</small>
             <h3 class="fw-bold">{{ $todayDrops }}</h3>
         </div>
     </div>
 </div>
+<div class="row">
+        {{-- CHART --}}
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 mb-4">
+            <h6 class="fw-bold mb-3">Approved vs Pending vs Cancelled Bookings</h6>
+            <canvas id="bookingChart" height="120"></canvas>
+        </div>
+    </div>
+    {{-- BAR CHART --}}
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 mb-4" style="height: 350px;">
+            <h6 class="fw-bold mb-3">Bookings Overview (Bar Chart)</h6>
+            <canvas id="bookingBarChart"></canvas>
+        </div>
+    </div>
+    {{-- LINE CHART --}}
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 mb-4" style="height: 350px;">
+            <h6 class="fw-bold mb-3">Bookings Trend (Line Chart)</h6>
+            <canvas id="bookingLineChart"></canvas>
+        </div>
 
-{{-- CHART --}}
-<div class="card shadow-sm p-3 mb-4">
-    <h6 class="fw-bold mb-3">Approved vs Cancelled Bookings</h6>
-    <canvas id="bookingChart" height="120"></canvas>
+    </div>
 </div>
+
+
 
 {{-- RECENT BOOKINGS --}}
 <div class="card shadow-sm">
@@ -98,6 +132,7 @@
                     <th>Motorcycle</th>
                     <th>Pick Date</th>
                     <th>Total Price</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,10 +143,19 @@
                     <td>{{ $booking->motorcycle->name ?? '—' }}</td>
                     <td>{{ \Carbon\Carbon::parse($booking->pick_date)->format('d M Y') }}</td>
                     <td>AED {{ number_format($booking->total_price ?? 0,2) }}</td>
+                    <td>
+                        @if($booking->status == 'approved')
+                            <span class="badge bg-success">Approved</span>
+                        @elseif($booking->status == 'pending')
+                            <span class="badge bg-warning">Pending</span>
+                        @else
+                            <span class="badge bg-danger">Cancelled</span>
+                        @endif
+                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="text-center text-muted">No bookings found</td>
+                    <td colspan="6" class="text-center text-muted">No bookings found</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -127,11 +171,83 @@
 new Chart(document.getElementById('bookingChart'), {
     type: 'doughnut',
     data: {
-        labels: ['Approved', 'Cancelled'],
+        labels: ['Approved', 'Pending', 'Cancelled'],
         datasets: [{
-            data: [{{ $approvedBookings }}, {{ $cancelledBookings }}],
-            backgroundColor: ['#198754', '#dc3545']
+            data: [{{ $approvedBookings }}, {{ $pendingBookings }}, {{ $cancelledBookings }}],
+            backgroundColor: ['#198754', '#ffc107', '#dc3545']
         }]
+    }
+    // options: {
+    //     responsive: true,
+    //     maintainAspectRatio: false // Canvas ke width/height ko strictly follow kare
+    // }
+});
+new Chart(document.getElementById('bookingBarChart'), {
+    type: 'bar', // Bar chart type
+    data: {
+        labels: ['Approved', 'Pending', 'Cancelled'],
+        datasets: [{
+            label: 'Bookings',
+            data: [{{ $approvedBookings }}, {{ $pendingBookings }}, {{ $cancelledBookings }}],
+            backgroundColor: ['#198754', '#ffc107', '#dc3545'],
+            borderColor: ['#145c32', '#856404', '#842029'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1 
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false 
+            }
+        }
+    }
+});
+new Chart(document.getElementById('bookingLineChart'), {
+    type: 'line',
+    data: {
+        labels: ['Approved', 'Pending', 'Cancelled'], 
+        datasets: [
+            {
+                label: 'Bookings',
+                data: [{{ $approvedBookings }}, {{ $pendingBookings }}, {{ $cancelledBookings }}],
+                fill: false, 
+                borderColor: '#0d6efd', 
+                backgroundColor: '#0d6efd',
+                tension: 0.4, 
+                pointBackgroundColor: ['#198754', '#ffc107', '#dc3545'], 
+                pointRadius: 6
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: true
+            },
+            tooltip: {
+                enabled: true
+            }
+        }
     }
 });
 </script>

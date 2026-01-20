@@ -9,12 +9,20 @@
     <div class="card p-3">
         <div class="mb-3">
             <label>Customer Name*</label>
-            <select name="customer_id" class="form-control" required>
+            <select name="customer_id" class="form-control">
                 <option value="">Select Customer</option>
                 @foreach($customers as $customer)
-                    <option value="{{ $customer->id }}">{{ $customer->first_name }} {{ $customer->last_name }}</option>
+                    <option value="{{ $customer->id }}"
+                        {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                        {{ $customer->first_name }} {{ $customer->last_name }}
+                    </option>
                 @endforeach
             </select>
+
+            @error('customer_id')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
+
         </div>
 
         <div class="mb-3">
@@ -42,7 +50,13 @@
         <div class="row">
             <div class="col-md-3 mb-3">
                 <label>Pick Date*</label>
-                <input type="date" name="pick_date" class="form-control" required>
+                <input type="date" name="pick_date" class="form-control"
+                    value="{{ old('pick_date') }}">
+
+                @error('pick_date')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+
             </div>
             <div class="col-md-3 mb-3">
                 <label>Drop Date*</label>
