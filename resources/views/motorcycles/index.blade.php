@@ -14,7 +14,7 @@
     <div class="card-body">
 
         {{-- Header --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
                 <h4 class="mb-1">Motorcycle List</h4>
                 <small class="text-muted">Manage your Motorcycles</small>
@@ -24,6 +24,27 @@
                 <i class="bi bi-plus-circle"></i> Add New Motorcycle
             </a>
         </div>
+
+        <div class="mb-2">
+            <form action="{{ route('motorcycles.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="">
+                        <input type="file" name="file" class="form-control" accept=".csv" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning text-white">
+                        <i class="bi bi-plus-circle"></i> Import CSV
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {{-- SEARCH FORM --}}
+        <form method="GET" class="mb-3 d-flex gap-2">
+            <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Search by name or code">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
 
         {{-- Table for md and up --}}
         <div class="table-responsive d-none d-md-block">

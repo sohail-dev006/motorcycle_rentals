@@ -3,59 +3,47 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\MotorcycleBooking;
-use App\Models\Motorcycle;
+use App\Models\TourBooking;
 use App\Models\Customer;
+use App\Models\Tour;
+use App\Models\Motorcycle;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // =====================
         // COUNTS
-        // =====================
-        $totalMotorcycleBookings = MotorcycleBooking::count();
-        $approvedBookings = MotorcycleBooking::where('status','confirmed')->count();
-        $cancelledBookings = MotorcycleBooking::where('status','cancelled')->count();
-        $dueBookings = MotorcycleBooking::whereDate('pick_date', today())->count();
+        $totalTourBookings = TourBooking::count();
+        $approvedBookings   = TourBooking::where('status','approved')->count();
+        $cancelledBookings  = TourBooking::where('status','cancelled')->count();
+        $dueBookings        = TourBooking::whereDate('pick_date', today())->count();
 
         $customers = Customer::count();
 
-        // =====================
         // MOTORCYCLE AVAILABILITY
-        // =====================
         $totalMotorcycles = Motorcycle::count();
 
-        $bookedMotorcycles = MotorcycleBooking::where('drop_date','>=', today())
-            ->where('status','!=','cancelled')
+        $bookedMotorcycles = TourBooking::whereDate('pick_date', '<=', today())
+            ->whereDate('pick_date', '>=', today())
+            ->where('status','approved')
             ->distinct('motorcycle_id')
             ->count('motorcycle_id');
 
         $availableMotorcycles = $totalMotorcycles - $bookedMotorcycles;
 
-        // =====================
         // TODAY PICK / DROP
-        // =====================
-        $todayPickups = MotorcycleBooking::whereDate('pick_date', today())->count();
-        $todayDrops   = MotorcycleBooking::whereDate('drop_date', today())->count();
+        $todayPickups = TourBooking::whereDate('pick_date', today())->count();
+        $todayDrops   = TourBooking::whereDate('pick_date', today())->count(); 
 
-        // =====================
-        // REVENUE
-        // =====================
-        // $motorcycleRevenue = MotorcycleBooking::where('status','confirmed')
-        //     ->sum('total_price');
-
-        // =====================
         // RECENT BOOKINGS
-        // =====================
-        $recentBookings = MotorcycleBooking::with('motorcycle')
+        $recentBookings = TourBooking::with(['motorcycle','customer','tour'])
             ->latest()
             ->take(5)
             ->get();
 
         return view('dashboard', compact(
-            'totalMotorcycleBookings',
+            'totalTourBookings',
             'approvedBookings',
             'cancelledBookings',
             'dueBookings',
@@ -65,7 +53,6 @@ class DashboardController extends Controller
             'availableMotorcycles',
             'todayPickups',
             'todayDrops',
-            // 'motorcycleRevenue',
             'recentBookings'
         ));
     }

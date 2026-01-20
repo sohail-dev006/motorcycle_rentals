@@ -14,7 +14,7 @@
     <div class="card-body">
 
         {{-- Header --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
                 <h4 class="mb-1">Tour List</h4>
                 <small class="text-muted">Manage your Tours</small>
@@ -22,6 +22,11 @@
 
             <a href="{{ route('tours.create') }}" class="btn btn-warning text-white">
                 <i class="bi bi-plus-circle"></i> Add New Tour
+            </a>
+        </div>
+        <div class="mb-2">
+            <a href="" class="btn btn-warning text-white">
+                <i class="bi bi-plus-circle"></i> Import CSV File
             </a>
         </div>
 

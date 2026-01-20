@@ -6,15 +6,77 @@ use App\Models\Motorcycle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Brand;
+use League\Csv\Reader;
+use Illuminate\Support\Facades\Storage;
 
 
 class MotorcycleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $motorcycles = Motorcycle::orderBy('sort_order')->paginate(10);
+        $query = Motorcycle::query();
+
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('code', 'like', "%{$search}%");
+        }
+
+        $motorcycles = $query->paginate(10)->withQueryString();
         return view('motorcycles.index', compact('motorcycles'));
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt',
+        ]);
+
+        $file = $request->file('file');
+        $csvData = file_get_contents($file);
+        $lines = explode(PHP_EOL, $csvData);
+        $header = null;
+
+        foreach ($lines as $key => $line) {
+            $data = str_getcsv($line);
+
+            if ($key === 0) {
+                $header = $data; 
+                continue;
+            }
+
+            if (count($data) === count($header)) {
+                $row = array_combine($header, $data);
+
+                $imagePath = null;
+                if (!empty($row['image_url'])) {
+                    try {
+                        $imageContents = file_get_contents($row['image_url']);
+                        $imageName = Str::random(20) . '.' . pathinfo($row['image_url'], PATHINFO_EXTENSION);
+                        Storage::disk('public')->put('motorcycles/' . $imageName, $imageContents);
+                        $imagePath = 'motorcycles/' . $imageName;
+                    } catch (\Exception $e) {
+                        
+                        $imagePath = null;
+                    }
+                }
+
+                // Create Motorcycle
+                Motorcycle::create([
+                    'name' => $row['name'] ?? null,
+                    'code' => $row['code'] ?? null,
+                    'sort_order' => $row['sort_order'] ?? 0,
+                    'status' => $row['status'] ?? 'active',
+                    'price' => $row['price'] ?? 0,
+                    'image' => $imagePath,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Motorcycles imported successfully!');
+    }
+
 
     public function create()
     {

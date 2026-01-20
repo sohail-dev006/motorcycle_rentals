@@ -9,6 +9,7 @@ use App\Http\Controllers\TourController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MotorcycleBookingController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\TourBookingController;
 
 Route::middleware(['auth'])->group(function () {
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -25,25 +26,16 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     // List all motorcycles
     Route::get('/motorcycles', [MotorcycleController::class, 'index'])->name('motorcycles.index');
-
-    // Show create form
     Route::get('/motorcycles/create', [MotorcycleController::class, 'create'])->name('motorcycles.create');
-
-    // Store new motorcycle
     Route::post('/motorcycles', [MotorcycleController::class, 'store'])->name('motorcycles.store');
-
-    // Show edit form
     Route::get('/motorcycles/{motorcycle}/edit', [MotorcycleController::class, 'edit'])->name('motorcycles.edit');
-
-    // Update existing motorcycle
     Route::put('/motorcycles/{motorcycle}', [MotorcycleController::class, 'update'])->name('motorcycles.update');
-
-    // Delete motorcycle
     Route::delete('/motorcycles/{motorcycle}', [MotorcycleController::class, 'destroy'])->name('motorcycles.destroy');
-
-    // Optional: show single motorcycle
     Route::get('/motorcycles/{motorcycle}', [MotorcycleController::class, 'show'])->name('motorcycles.show');
+    Route::post('/motorcycles/import', [MotorcycleController::class, 'import'])->name('motorcycles.import');
 
+
+    // add ons
     Route::get('/add-on', [AddOnController::class, 'index'])->name('add.index');
     Route::get('/add-on/create', [AddOnController::class, 'create'])->name('add.create');
     Route::post('/add-on', [AddOnController::class, 'store'])->name('add.store');
@@ -95,6 +87,21 @@ Route::middleware('auth')->group(function () {
     Route::put('/bookings/{booking}', [MotorcycleBookingController::class, 'update'])->name('bookings.update');
     Route::get('/bookings/{booking}', [MotorcycleBookingController::class, 'show'])->name('bookings.show');
     Route::delete('/bookings/{booking}', [MotorcycleBookingController::class, 'destroy'])->name('bookings.destroy');
+
+
+    // tours booking
+
+    Route::get('/tour-bookings', [TourBookingController::class,'index'])->name('tour-bookings.index');
+    Route::get('/tour-bookings/create', [TourBookingController::class,'create'])->name('tour-bookings.create');
+    Route::post('/tour-bookings', [TourBookingController::class,'store'])->name('tour-bookings.store');
+    Route::get('/tour-bookings/{tourBooking}/edit', [TourBookingController::class, 'edit'])->name('tour-bookings.edit');
+    Route::put('/tour-bookings/{tourBooking}', [TourBookingController::class, 'update'])->name('tour-bookings.update');
+    Route::get('/tour-bookings/{tourBooking}', [TourBookingController::class, 'show'])->name('tour-bookings.show');
+    Route::delete('/tour-bookings/{tourBooking}', [TourBookingController::class, 'destroy'])->name('tour-bookings.destroy');
+
+
+
+
 
 });
 

@@ -9,8 +9,8 @@
 <div class="row g-3 mb-4">
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Total Motorcycle Bookings</small>
-            <h3 class="fw-bold">{{ $totalMotorcycleBookings }}</h3>
+            <small>Total Tour Bookings</small>
+            <h3 class="fw-bold">{{ $totalTourBookings }}</h3>
         </div>
     </div>
 
@@ -23,14 +23,14 @@
 
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Canceled Bookings</small>
+            <small>Cancelled Bookings</small>
             <h3 class="fw-bold text-danger">{{ $cancelledBookings }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Due Bookings</small>
+            <small>Due Bookings Today</small>
             <h3 class="fw-bold text-warning">{{ $dueBookings }}</h3>
         </div>
     </div>
@@ -58,13 +58,6 @@
             <h3 class="fw-bold text-danger">{{ $bookedMotorcycles }}</h3>
         </div>
     </div>
-
-    {{-- <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <small>Motorcycle Revenue</small>
-            <h3 class="fw-bold">AED {{ number_format($motorcycleRevenue,2) }}</h3>
-        </div>
-    </div> --}}
 </div>
 
 {{-- TODAY PICK / DROP --}}
@@ -86,39 +79,35 @@
 
 {{-- CHART --}}
 <div class="card shadow-sm p-3 mb-4">
-    <h6 class="fw-bold mb-3">Approved vs Canceled Bookings</h6>
+    <h6 class="fw-bold mb-3">Approved vs Cancelled Bookings</h6>
     <canvas id="bookingChart" height="120"></canvas>
 </div>
 
 {{-- RECENT BOOKINGS --}}
 <div class="card shadow-sm">
     <div class="card-header bg-white fw-bold">
-        Recent Motorcycle Bookings
+        Recent Tour Bookings
     </div>
 
     <div class="table-responsive">
         <table class="table mb-0 align-middle">
             <thead class="table-light">
                 <tr>
+                    <th>Customer</th>
+                    <th>Tour</th>
                     <th>Motorcycle</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
+                    <th>Pick Date</th>
                     <th>Total Price</th>
-                    <th>Days</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($recentBookings as $booking)
-                @php
-                    $days = \Carbon\Carbon::parse($booking->pick_date)
-                            ->diffInDays(\Carbon\Carbon::parse($booking->drop_date)) + 1;
-                @endphp
                 <tr>
+                    <td>{{ $booking->customer->first_name ?? '—' }} {{ $booking->customer->last_name ?? '' }}</td>
+                    <td>{{ $booking->tour->name ?? '—' }}</td>
                     <td>{{ $booking->motorcycle->name ?? '—' }}</td>
                     <td>{{ \Carbon\Carbon::parse($booking->pick_date)->format('d M Y') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($booking->drop_date)->format('d M Y') }}</td>
                     <td>AED {{ number_format($booking->total_price ?? 0,2) }}</td>
-                    <td>{{ $days }} Days</td>
                 </tr>
                 @empty
                 <tr>
@@ -138,7 +127,7 @@
 new Chart(document.getElementById('bookingChart'), {
     type: 'doughnut',
     data: {
-        labels: ['Approved', 'Canceled'],
+        labels: ['Approved', 'Cancelled'],
         datasets: [{
             data: [{{ $approvedBookings }}, {{ $cancelledBookings }}],
             backgroundColor: ['#198754', '#dc3545']

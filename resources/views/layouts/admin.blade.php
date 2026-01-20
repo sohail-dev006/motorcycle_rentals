@@ -101,15 +101,15 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
-                   href="{{ route('tours.create') }}">
+                <a class="nav-link {{ request()->routeIs('tour-bookings.index') ? 'active' : '' }}" 
+                   href="{{ route('tour-bookings.index') }}">
                     <i class="fa fa-plus-circle me-2"></i> Tour Bookings
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
-                   href="{{ route('tours.create') }}">
+                <a class="nav-link {{ request()->routeIs('tour-bookings.create') ? 'active' : '' }}" 
+                   href="{{ route('tour-bookings.create') }}">
                     <i class="fa fa-plus-circle me-2"></i> Add Tour Bookings
                 </a>
             </li>
@@ -217,15 +217,15 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
-                   href="{{ route('tours.create') }}">
+                <a class="nav-link {{ request()->routeIs('tour-bookings.index') ? 'active' : '' }}" 
+                   href="{{ route('tour-bookings.index') }}">
                     <i class="fa fa-plus-circle me-2"></i> Tour Bookings
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('tours.create') ? 'active' : '' }}" 
-                   href="{{ route('tours.create') }}">
+                <a class="nav-link {{ request()->routeIs('tour-bookings.create') ? 'active' : '' }}" 
+                   href="{{ route('tour-bookings.create') }}">
                     <i class="fa fa-plus-circle me-2"></i> Add Tour Bookings
                 </a>
             </li>
