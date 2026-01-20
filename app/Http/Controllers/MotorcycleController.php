@@ -153,6 +153,7 @@ class MotorcycleController extends Controller
 
     public function destroy(Motorcycle $motorcycle)
     {
+                      
         $motorcycle->delete();
 
         return redirect()
