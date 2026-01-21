@@ -10,6 +10,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MotorcycleBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserPermissionController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TourBookingController;
 
@@ -141,22 +142,17 @@ Route::middleware(['auth'])
 
 });
 
-// Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
-//     // USERS
-//     Route::get('/users', [UserPermissionController::class,'index'])->name('users');
-//     Route::get('/users/create', [UserPermissionController::class,'create'])->name('users.create');
-//     Route::post('/users', [UserPermissionController::class,'store'])->name('users.store');
-//     Route::get('/users/{user}/edit', [UserPermissionController::class,'edit'])->name('users.edit');
-//     Route::put('/users/{user}', [UserPermissionController::class,'update'])->name('users.update');
-//     Route::delete('/users/{user}', [UserPermissionController::class,'destroy'])->name('users.destroy');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/calendar', [EventController::class,'index'])->name('calendar.index');
+    Route::get('/calendar/fetch', [EventController::class,'fetch'])->name('calendar.fetch');
 
-//     // ROLES
-//     Route::get('/roles', [RoleController::class,'index'])->name('roles');
-//     Route::get('/roles/create', [RoleController::class,'create'])->name('roles.create');
-//     Route::post('/roles', [RoleController::class,'store'])->name('roles.store');
-//     Route::delete('/roles/{role}', [RoleController::class,'destroy'])->name('roles.destroy');
-// });
+    Route::post('/calendar/store', [EventController::class,'store'])->name('calendar.store');
+    Route::put('calendar/update/{id}', [EventController::class, 'update'])->name('calendar.update');
+    Route::delete('/calendar/delete/{event}', [EventController::class,'destroy']);
+    Route::post('/calendar/drag/{event}', [EventController::class,'dragUpdate']);
+});
+
 
 
 

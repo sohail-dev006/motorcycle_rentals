@@ -76,6 +76,12 @@ class RolesPermissionsSeeder extends Seeder
             ['module'=>'Roles & Permission','name'=>'role-list'],
             ['module'=>'Roles & Permission','name'=>'add-role'],
             ['module'=>'Roles & Permission','name'=>'delete-role'],
+
+            // Calendar
+            ['module'=>'Calendar','name'=>'calendar-list'],
+            ['module'=>'Calendar','name'=>'add-calendar'],
+            ['module'=>'Calendar','name'=>'edit-calendar'],
+            ['module'=>'Calendar','name'=>'delete-calendar'],
         ];
 
         foreach ($permissions as $perm) {

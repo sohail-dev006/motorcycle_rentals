@@ -157,14 +157,20 @@
             </li>
             {{-- @endcan --}}
 
-            <li class="nav-item mt-3 mb-2 fw-semibold text-muted">Calendar</li>
+
+            {{-- calender --}}
+
+            <li class="nav-item mt-3 mb-2 fw-semibold text-muted">
+                Calendar
+            </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.roles*') ? 'active' : '' }}"
-                href="{{ route('admin.roles.index') }}">
+                <a class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}"
+                href="{{ route('calendar.index') }}">
                     <i class="fa fa-calendar me-2"></i> Calendar
                 </a>
             </li>
+
 
 
         </ul>
@@ -309,14 +315,17 @@
                 </li>
                 {{-- @endcan --}}
 
-            <li class="nav-item mt-3 mb-2 fw-semibold text-muted">Calendar</li>
+            <li class="nav-item mt-3 mb-2 fw-semibold text-muted">
+                Calendar
+            </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.roles*') ? 'active' : '' }}"
-                href="{{ route('admin.roles.index') }}">
+                <a class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}"
+                href="{{ route('calendar.index') }}">
                     <i class="fa fa-calendar me-2"></i> Calendar
                 </a>
             </li>
+
 
 
 
@@ -364,8 +373,11 @@
                     {{-- Name & Role --}}
                     <div class="text-start">
                         <strong>{{ Auth::user()->name }}</strong><br>
-                        <small class="text-muted">Super Admin</small>
+                        <small class="text-muted">
+                            {{ Auth::user()->roles->pluck('name')->join(', ') ?: 'User' }}
+                        </small>
                     </div>
+
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end">
