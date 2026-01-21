@@ -11,6 +11,11 @@ class TourController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('tour-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $search = $request->search;
 
         $tours = Tour::when($search, function ($q) use ($search) {
@@ -31,6 +36,11 @@ class TourController extends Controller
 
     public function create()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('add-tour'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('tours.create');
     }
 
@@ -59,6 +69,11 @@ class TourController extends Controller
 
     public function edit(Tour $tour)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('edit-tour'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('tours.edit', compact('tour'));
     }
 
@@ -87,11 +102,22 @@ class TourController extends Controller
 
     public function show(Tour $tour)
     {
+
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('tour-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('tours.show', compact('tour'));
     }
 
     public function destroy(Tour $tour)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('delete-tour'))) {
+            abort(403, 'Unauthorized action.');
+        }
         // if ($tour->image) {
         //     \Storage::disk('public')->delete($tour->image);
         // }

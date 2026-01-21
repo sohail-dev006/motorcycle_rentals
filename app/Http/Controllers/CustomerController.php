@@ -13,6 +13,11 @@ class CustomerController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('customer-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $customers = Customer::latest()->paginate(10);
 
         return view('customers.index', compact('customers'));
@@ -23,6 +28,11 @@ class CustomerController extends Controller
      */
     public function create()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('add-customer'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('customers.create');
     }
 
@@ -56,6 +66,12 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
+
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('customer-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('customers.show', compact('customer'));
     }
 
@@ -64,6 +80,11 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('edit-customer'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('customers.edit', compact('customer'));
     }
 
@@ -102,6 +123,11 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('delete-customer'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $customer->delete();
 
         return redirect()

@@ -10,6 +10,11 @@ class AddOnController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('addon-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $search = $request->search;
 
         $addons = AddOn::when($search, function ($q) use ($search) {
@@ -23,6 +28,12 @@ class AddOnController extends Controller
 
     public function create()
     {
+        
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('add-addon'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('add.create', );
     }
     public function store(Request $request)
@@ -48,6 +59,11 @@ class AddOnController extends Controller
     }
     public function edit(AddOn $add)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('edit-addon'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('add.edit', [
             'addon' => $add
         ]);
@@ -75,6 +91,11 @@ class AddOnController extends Controller
     }
     public function show(AddOn $add)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('addon-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('add.show', [
             'addon' => $add
         ]);
@@ -83,11 +104,18 @@ class AddOnController extends Controller
 
     public function destroy(AddOn $add)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('delete-addon'))) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $add->delete();
 
         return redirect()
             ->route('add.index')
             ->with('success', 'Add On deleted successfully');
     }
+
 
 }

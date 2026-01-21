@@ -2,7 +2,8 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8">
-    <title>@yield('title', 'Admin Dashboard')</title>
+    {{-- <title>@yield('title', 'Admin Dashboard')</title> --}}
+    <title>{{ config('app.name', 'Laravel') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap -->
@@ -27,6 +28,8 @@
     </div>
     <div class="offcanvas-body p-0">
         <ul class="nav flex-column p-3 gap-1">
+            <li class="nav-item mt-1 fw-semibold text-muted">Main</li>
+
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" 
                    href="{{ route('dashboard') }}">
@@ -133,21 +136,37 @@
             </li>
 
             {{-- User management --}}
-            <li class="nav-item mt-3 fw-semibold text-muted">User Management</li>
+   
+            <li class="nav-item mt-3 mb-2 fw-semibold text-muted">User Management</li>
 
-            <li class="nav-item ">
-                <a class="nav-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" 
-                   href="{{ route('customers.index') }}">
+            {{-- @can('user-list') --}}
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}"
+                href="{{ route('admin.users') }}">
                     <i class="fa fa-users me-2"></i> Users
                 </a>
             </li>
+            {{-- @endcan --}}
 
+            {{-- @can('role-list') --}}
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" 
-                   href="{{ route('customers.create') }}">
+                <a class="nav-link {{ request()->routeIs('admin.roles*') ? 'active' : '' }}"
+                href="{{ route('admin.roles.index') }}">
                     <i class="fa fa-user-shield me-2"></i> Roles & Permission
                 </a>
             </li>
+            {{-- @endcan --}}
+
+            <li class="nav-item mt-3 mb-2 fw-semibold text-muted">Calendar</li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.roles*') ? 'active' : '' }}"
+                href="{{ route('admin.roles.index') }}">
+                    <i class="fa fa-calendar me-2"></i> Calendar
+                </a>
+            </li>
+
+
         </ul>
     </div>
 </div>
@@ -161,6 +180,7 @@
         </div>
 
         <ul class="nav flex-column p-3 gap-1">
+            <li class="nav-item mt-1 fw-semibold text-muted">Main</li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" 
                    href="{{ route('dashboard') }}">
@@ -268,21 +288,37 @@
 
 
                         {{-- User management --}}
-            <li class="nav-item mt-3 fw-semibold text-muted">User Management</li>
+            
+            <li class="nav-item mt-3 mb-2 fw-semibold text-muted">User Management</li>
 
-            <li class="nav-item ">
-                <a class="nav-link {{ request()->routeIs('customers.index') ? 'active' : '' }}" 
-                   href="{{ route('customers.index') }}">
-                    <i class="fa fa-users me-2"></i> Users
-                </a>
-            </li>
+                {{-- @can('user-list') --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}"
+                    href="{{ route('admin.users') }}">
+                        <i class="fa fa-users me-2"></i> Users
+                    </a>
+                </li>
+                {{-- @endcan --}}
+
+                {{-- @can('role-list') --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.roles*') ? 'active' : '' }}"
+                    href="{{ route('admin.roles.index') }}">
+                        <i class="fa fa-user-shield me-2"></i> Roles & Permission
+                    </a>
+                </li>
+                {{-- @endcan --}}
+
+            <li class="nav-item mt-3 mb-2 fw-semibold text-muted">Calendar</li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('customers.create') ? 'active' : '' }}" 
-                   href="{{ route('customers.create') }}">
-                    <i class="fa fa-user-shield me-2"></i> Roles & Permission
+                <a class="nav-link {{ request()->routeIs('admin.roles*') ? 'active' : '' }}"
+                href="{{ route('admin.roles.index') }}">
+                    <i class="fa fa-calendar me-2"></i> Calendar
                 </a>
             </li>
+
+
 
 
         </ul>

@@ -14,6 +14,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('view-dashboard'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $today = Carbon::today();
 
         // TOTAL BOOKINGS

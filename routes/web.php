@@ -9,6 +9,8 @@ use App\Http\Controllers\TourController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MotorcycleBookingController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserPermissionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TourBookingController;
 
 Route::middleware(['auth'])->group(function () {
@@ -100,11 +102,61 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tour-bookings/{tourBooking}', [TourBookingController::class, 'destroy'])->name('tour-bookings.destroy');
 
 
-
+    // user_management 
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
+    Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
+    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
 
 });
 
+
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+    // Users
+    Route::get('/users', [UserPermissionController::class,'index'])->name('users');
+    Route::get('/users/create', [UserPermissionController::class,'create'])->name('users.create');
+    Route::post('/users', [UserPermissionController::class,'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UserPermissionController::class,'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserPermissionController::class,'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserPermissionController::class,'destroy'])->name('users.destroy');
+
+    // Roles & Permissions
+    Route::get('/roles-permissions', [RoleController::class,'index'])->name('roles.index');
+    Route::get('/roles-permissions/create', [RoleController::class,'create'])->name('roles.create');
+    Route::post('/roles-permissions', [RoleController::class,'store'])->name('roles.store');
+    Route::delete('/roles-permissions/{role}', [RoleController::class,'destroy'])->name('roles.destroy');
+
+    // routes/admin.php
+    Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
+    Route::put('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])
+        ->name('roles.permissions.update');
+
+});
+
+// Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+
+//     // USERS
+//     Route::get('/users', [UserPermissionController::class,'index'])->name('users');
+//     Route::get('/users/create', [UserPermissionController::class,'create'])->name('users.create');
+//     Route::post('/users', [UserPermissionController::class,'store'])->name('users.store');
+//     Route::get('/users/{user}/edit', [UserPermissionController::class,'edit'])->name('users.edit');
+//     Route::put('/users/{user}', [UserPermissionController::class,'update'])->name('users.update');
+//     Route::delete('/users/{user}', [UserPermissionController::class,'destroy'])->name('users.destroy');
+
+//     // ROLES
+//     Route::get('/roles', [RoleController::class,'index'])->name('roles');
+//     Route::get('/roles/create', [RoleController::class,'create'])->name('roles.create');
+//     Route::post('/roles', [RoleController::class,'store'])->name('roles.store');
+//     Route::delete('/roles/{role}', [RoleController::class,'destroy'])->name('roles.destroy');
+// });
 
 
 

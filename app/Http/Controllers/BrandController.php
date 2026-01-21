@@ -9,6 +9,11 @@ class BrandController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('brand-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $search = $request->search;
 
         $brands = Brand::when($search, function ($q) use ($search) {
@@ -24,6 +29,11 @@ class BrandController extends Controller
 
     public function create()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('add-brand'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('brands.create');
     }
 
@@ -41,6 +51,11 @@ class BrandController extends Controller
 
     public function edit(Brand $brand)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('edit-brand'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('brands.edit', compact('brand'));
     }
 
@@ -58,6 +73,11 @@ class BrandController extends Controller
 
     public function destroy(Brand $brand)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('delete-brand'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $brand->delete();
 
         return redirect()->route('brands.index')

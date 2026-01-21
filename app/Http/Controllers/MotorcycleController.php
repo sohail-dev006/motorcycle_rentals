@@ -14,6 +14,11 @@ class MotorcycleController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('motorcycle-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $query = Motorcycle::query();
 
 
@@ -28,6 +33,11 @@ class MotorcycleController extends Controller
     }
     public function import(Request $request)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('csv-motorcycle'))) {
+            abort(403, 'Unauthorized action.');
+        }
         // Validate file
         $request->validate([
             'file' => 'required|mimes:csv,txt'
@@ -97,59 +107,15 @@ class MotorcycleController extends Controller
     }
 
 
-    // public function import(Request $request)
-    // {
-        // $request->validate([
-        //     'file' => 'required|mimes:csv,txt',
-        // ]);
-
-        // $file = $request->file('file');
-        // $csvData = file_get_contents($file);
-        // $lines = explode(PHP_EOL, $csvData);
-        // $header = null;
-
-        // foreach ($lines as $key => $line) {
-        //     $data = str_getcsv($line);
-
-        //     if ($key === 0) {
-        //         $header = $data; 
-        //         continue;
-        //     }
-
-        //     if (count($data) === count($header)) {
-        //         $row = array_combine($header, $data);
-
-        //         $imagePath = null;
-        //         if (!empty($row['image_url'])) {
-        //             try {
-        //                 $imageContents = file_get_contents($row['image_url']);
-        //                 $imageName = Str::random(20) . '.' . pathinfo($row['image_url'], PATHINFO_EXTENSION);
-        //                 Storage::disk('public')->put('motorcycles/' . $imageName, $imageContents);
-        //                 $imagePath = 'motorcycles/' . $imageName;
-        //             } catch (\Exception $e) {
-                        
-        //                 $imagePath = null;
-        //             }
-        //         }
-
-    //             // Create Motorcycle
-                // Motorcycle::create([
-                //     'name' => $row['name'] ?? null,
-                //     'code' => $row['code'] ?? null,
-                //     'sort_order' => $row['sort_order'] ?? 0,
-                //     'status' => $row['status'] ?? 'active',
-                //     'price' => $row['price'] ?? 0,
-                //     'image' => $imagePath,
-                // ]);
-    //         }
-    //     }
-
-    //     return redirect()->back()->with('success', 'Motorcycles imported successfully!');
-    // }
-
+    
 
     public function create()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('add-motorcycle'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $brands = Brand::all();
         return view('motorcycles.create', compact('brands'));
     }
@@ -185,11 +151,22 @@ class MotorcycleController extends Controller
 
     public function show(Motorcycle $motorcycle)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('motorcycle-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('motorcycles.show', compact('motorcycle'));
     }
 
     public function edit(Motorcycle $motorcycle)
     {
+
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('edit-motorcycle'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $brands = Brand::all();
         return view('motorcycles.edit', compact('motorcycle', 'brands'));
     }
@@ -223,7 +200,11 @@ class MotorcycleController extends Controller
 
     public function destroy(Motorcycle $motorcycle)
     {
-                      
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('delete-motorcycle'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $motorcycle->delete();
 
         return redirect()

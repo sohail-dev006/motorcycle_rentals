@@ -14,6 +14,11 @@ class MotorcycleBookingController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('motorcycle-booking-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $search = $request->search;
 
         $bookings = MotorcycleBooking::with(['customer', 'motorcycle'])
@@ -31,6 +36,11 @@ class MotorcycleBookingController extends Controller
 
     public function create()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('add-motorcycle-booking'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $customers = Customer::all();
         $addons = AddOn::all();
 
@@ -62,6 +72,11 @@ class MotorcycleBookingController extends Controller
 
     public function show(MotorcycleBooking $booking)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('motorcycle-booking-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $booking->load(['customer', 'motorcycle']);
         return view('bookings.show', compact('booking'));
     }
@@ -69,6 +84,11 @@ class MotorcycleBookingController extends Controller
 
     public function edit(MotorcycleBooking $booking)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('edit-motorcycle-booking'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $customers = Customer::all();
         $addons = AddOn::all();
 
@@ -104,6 +124,11 @@ class MotorcycleBookingController extends Controller
 
     public function destroy(MotorcycleBooking $booking)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('delete-motorcycle-booking'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $booking->delete();
 
         return redirect()->route('bookings.index')

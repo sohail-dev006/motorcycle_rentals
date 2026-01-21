@@ -11,92 +11,108 @@
 
         <form action="{{ isset($tourBooking) ? route('tour-bookings.update', $tourBooking->id) : route('tour-bookings.store') }}" method="POST">
             @csrf
-            @if(isset($tourBooking))
+            @isset($tourBooking)
                 @method('PUT')
-            @endif
+            @endisset
 
             <div class="row g-3">
 
+                {{-- Customer --}}
                 <div class="col-md-4">
                     <label class="form-label">Customer*</label>
                     <select name="customer_id" class="form-control" required>
                         <option value="">Select Customer</option>
                         @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}" {{ (old('customer_id', $tourBooking->customer_id ?? '') == $customer->id) ? 'selected' : '' }}>
+                            <option value="{{ $customer->id }}"
+                                {{ old('customer_id', $tourBooking->customer_id ?? '') == $customer->id ? 'selected' : '' }}>
                                 {{ $customer->first_name }} {{ $customer->last_name }} ({{ $customer->mobile }})
                             </option>
                         @endforeach
                     </select>
-                    @error('customer_id')<span class="text-danger">{{ $message }}</span>@enderror
                 </div>
 
+                {{-- Pick Date --}}
                 <div class="col-md-4">
                     <label class="form-label">Pick Date*</label>
-                    <input type="date" name="pick_date" class="form-control" required value="{{ old('pick_date', $tourBooking->pick_date ?? '') }}">
-                    @error('pick_date')<span class="text-danger">{{ $message }}</span>@enderror
+                    <input type="date" name="pick_date" class="form-control" required
+                        value="{{ old('pick_date', $tourBooking->pick_date ?? '') }}">
                 </div>
 
+                {{-- Status --}}
                 <div class="col-md-4">
                     <label class="form-label">Status*</label>
                     <select name="status" class="form-control">
                         @foreach(['pending','approved','cancelled'] as $status)
-                            <option value="{{ $status }}" {{ (old('status', $tourBooking->status ?? '') == $status) ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
+                            <option value="{{ $status }}"
+                                {{ old('status', $tourBooking->status ?? '') == $status ? 'selected' : '' }}>
+                                {{ ucfirst($status) }}
+                            </option>
                         @endforeach
                     </select>
-                    @error('status')<span class="text-danger">{{ $message }}</span>@enderror
                 </div>
 
+                {{-- Tour --}}
                 <div class="col-md-6">
                     <label class="form-label">Tour*</label>
-                    <select name="tour_id" class="form-control" required>
+                    <select name="tour_id" id="tour" class="form-control" required>
+                        <option value="">Select Tour</option>
                         @foreach($tours as $tour)
-                            <option value="{{ $tour->id }}" {{ (old('tour_id', $tourBooking->tour_id ?? '') == $tour->id) ? 'selected' : '' }}>
+                            <option value="{{ $tour->id }}"
+                                data-group="{{ $tour->group_price }}"
+                                data-private="{{ $tour->private_price }}"
+                                data-passenger="{{ $tour->passenger_price }}"
+                                {{ old('tour_id', $tourBooking->tour_id ?? '') == $tour->id ? 'selected' : '' }}>
                                 {{ $tour->name }}
                             </option>
                         @endforeach
                     </select>
-                    @error('tour_id')<span class="text-danger">{{ $message }}</span>@enderror
                 </div>
 
+                {{-- Motorcycle --}}
                 <div class="col-md-6">
                     <label class="form-label">Motorcycle</label>
                     <select name="motorcycle_id" class="form-control">
                         <option value="">Select</option>
                         @foreach($motorcycles as $m)
-                            <option value="{{ $m->id }}" {{ (old('motorcycle_id', $tourBooking->motorcycle_id ?? '') == $m->id) ? 'selected' : '' }}>{{ $m->name }}</option>
+                            <option value="{{ $m->id }}"
+                                {{ old('motorcycle_id', $tourBooking->motorcycle_id ?? '') == $m->id ? 'selected' : '' }}>
+                                {{ $m->name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
 
+                {{-- Prices --}}
                 <div class="col-md-4">
                     <label>Group Tour Price</label>
-                    <input type="number" step="0.01" name="group_price" id="group" class="form-control calc"
-                        value="{{ old('group_price', $tourBooking->group_price ?? '') }}">
-                    @error('group_price')<span class="text-danger">{{ $message }}</span>@enderror
+                    <input type="number" step="0.01" name="group_price" id="group"
+                        class="form-control calc"
+                        value="{{ old('group_price', $tourBooking->group_price ?? 0) }}">
                 </div>
 
                 <div class="col-md-4">
                     <label>Private Tour Price</label>
-                    <input type="number" step="0.01" name="private_price" id="private" class="form-control calc"
-                        value="{{ old('private_price', $tourBooking->private_price ?? '') }}">
-                    @error('private_price')<span class="text-danger">{{ $message }}</span>@enderror
+                    <input type="number" step="0.01" name="private_price" id="private"
+                        class="form-control calc"
+                        value="{{ old('private_price', $tourBooking->private_price ?? 0) }}">
                 </div>
 
                 <div class="col-md-4">
                     <label>Passenger Price</label>
-                    <input type="number" step="0.01" name="passenger_price" id="passenger" class="form-control calc"
-                        value="{{ old('passenger_price', $tourBooking->passenger_price ?? '') }}">
-                    @error('passenger_price')<span class="text-danger">{{ $message }}</span>@enderror
+                    <input type="number" step="0.01" name="passenger_price" id="passenger"
+                        class="form-control calc"
+                        value="{{ old('passenger_price', $tourBooking->passenger_price ?? 0) }}">
                 </div>
 
             </div>
 
             <hr>
 
+            {{-- Summary --}}
             <h6>Booking Summary</h6>
-            <p>Subtotal: <strong id="subtotal">0</strong> AED</p>
-            <p>5% VAT: <strong id="vat">0</strong> AED</p>
-            <p>Total Price: <strong id="total">0</strong> AED</p>
+            <p>Subtotal: <strong id="subtotal">0.00</strong> AED</p>
+            <p>5% VAT: <strong id="vat">0.00</strong> AED</p>
+            <p>Total Price: <strong id="total">0.00</strong> AED</p>
 
             <div class="text-end">
                 <button class="btn btn-warning px-5">Save Booking</button>
@@ -109,6 +125,7 @@
 
 @push('scripts')
 <script>
+const tourSelect = document.getElementById('tour');
 const group = document.getElementById('group');
 const priv = document.getElementById('private');
 const passenger = document.getElementById('passenger');
@@ -118,12 +135,8 @@ function calculate() {
     let p = parseFloat(priv.value) || 0;
     let ps = parseFloat(passenger.value) || 0;
 
-    // Disable logic
-    if(g>0) priv.disabled = true;
-    else priv.disabled = false;
-
-    if(p>0) group.disabled = true;
-    else group.disabled = false;
+    priv.disabled = g > 0;
+    group.disabled = p > 0;
 
     let subtotal = g + p + ps;
     let vat = subtotal * 0.05;
@@ -134,8 +147,17 @@ function calculate() {
     document.getElementById('total').innerText = total.toFixed(2);
 }
 
-// Initialize
-[group, priv, passenger].forEach(i => i.addEventListener('input', calculate));
+// Tour change → auto prices
+tourSelect.addEventListener('change', function () {
+    const opt = this.options[this.selectedIndex];
+    group.value = opt.dataset.group || 0;
+    priv.value = opt.dataset.private || 0;
+    passenger.value = opt.dataset.passenger || 0;
+    calculate();
+});
+
+// Init
+[group, priv, passenger].forEach(el => el.addEventListener('input', calculate));
 window.addEventListener('load', calculate);
 </script>
 @endpush

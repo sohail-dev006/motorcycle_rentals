@@ -12,12 +12,22 @@ class TourBookingController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('tour-booking-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $bookings = TourBooking::with(['customer','tour','motorcycle'])->latest()->paginate(10);
         return view('tour-bookings.index', compact('bookings'));
     }
 
     public function create()
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('add-tour-booking'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $tours = Tour::all();
         $motorcycles = Motorcycle::all();
         $customers = Customer::all();
@@ -57,11 +67,21 @@ class TourBookingController extends Controller
 
     public function show(TourBooking $tourBooking)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('tour-booking-list'))) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('tour-bookings.show', compact('tourBooking'));
     }
 
     public function edit(TourBooking $tourBooking)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('edit-tour-booking'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $tours = Tour::all();
         $motorcycles = Motorcycle::all();
         $customers = Customer::all();
@@ -100,6 +120,11 @@ class TourBookingController extends Controller
 
     public function destroy(TourBooking $tourBooking)
     {
+        $user = auth()->user();
+
+        if (!($user->hasRole('Super Admin') || $user->can('delete-tour-booking'))) {
+            abort(403, 'Unauthorized action.');
+        }
         $tourBooking->delete();
         return redirect()->route('tour-bookings.index')->with('success','Booking deleted successfully!');
     }
