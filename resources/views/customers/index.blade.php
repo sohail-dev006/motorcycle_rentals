@@ -60,12 +60,16 @@
                     <td>{{ $customer->mobile }}</td>
                     <td class="customer-country">{{ $customer->country }}</td>
                     <td class="d-flex gap-1">
-                        <a href="{{ route('customers.show',$customer) }}" class="btn btn-sm btn-outline-secondary">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                        <a href="{{ route('customers.edit',$customer) }}" class="btn btn-sm btn-outline-primary">
-                            <i class="fa fa-pen"></i>
-                        </a>
+                        <div class="">
+                            <a href="{{ route('customers.show',$customer) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </div>
+                        <div class="">
+                            <a href="{{ route('customers.edit',$customer) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fa fa-pen"></i>
+                            </a>
+                        </div>
                         <form method="POST" action="{{ route('customers.destroy',$customer) }}">
                             @csrf
                             @method('DELETE')

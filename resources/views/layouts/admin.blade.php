@@ -2,7 +2,7 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8">
-    {{-- <title>@yield('title', 'Admin Dashboard')</title> --}}
+    <title>@yield('title', 'Admin Dashboard')</title>
     <title>{{ config('app.name', 'Laravel') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

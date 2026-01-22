@@ -52,11 +52,11 @@
                         id="motorcycleSlug"
                         class="form-control"
                         value="{{ old('slug') }}"
-                        placeholder="auto-generated but editable"
+                        {{-- placeholder="auto-generated but editable" --}}
                     >
-                    <small class="text-muted">
+                    {{-- <small class="text-muted">
                         You can edit or add more text to the slug
-                    </small>
+                    </small> --}}
                 </div>
 
                 @foreach ([
