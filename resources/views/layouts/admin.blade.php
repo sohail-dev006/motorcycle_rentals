@@ -178,7 +178,6 @@
 </div>
 
 <div class="d-flex">
-
     {{-- DESKTOP SIDEBAR --}}
     <aside class="border-end d-none d-lg-block" style="min-width:260px; min-height:100vh;">
         <div class="pb-2 text-center border-bottom">
@@ -360,10 +359,10 @@
                     @if(Auth::user()->profile_image)
                         <img src="{{ asset('storage/' . Auth::user()->profile_image) }}"
                             alt="User"
-                            class="rounded-circle"
+                            class="rounded-circle img-fluid"
                             width="40" height="40">
                     @else
-                        <div class="rounded-circle bg-primary text-white d-flex 
+                        <div class="rounded-circle  bg-primary text-white d-flex 
                                     align-items-center justify-content-center"
                             style="width:40px;height:40px;font-weight:bold;">
                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}

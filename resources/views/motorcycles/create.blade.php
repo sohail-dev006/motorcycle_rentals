@@ -39,9 +39,29 @@
             </h6>
 
             <div class="row g-3">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label class="form-label">Motorcycle Name *</label>
+                    <input type="text" name="name" id="motorcycleName" class="form-control" value="{{ old('name') }}">
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label class="form-label">Slug *</label>
+                    <input
+                        type="text"
+                        name="slug"
+                        id="motorcycleSlug"
+                        class="form-control"
+                        value="{{ old('slug') }}"
+                        placeholder="auto-generated but editable"
+                    >
+                    <small class="text-muted">
+                        You can edit or add more text to the slug
+                    </small>
+                </div>
+
                 @foreach ([
-                    'name'        => 'Motorcycle Name *',
-                    'slug'        => 'Slug *',
+                    // 'name'        => 'Motorcycle Name *',
+                    // 'slug'        => 'Slug *',
                     'code'        => 'Code',
                     'quantity'    => 'Quantity',
                     'sort_order'  => 'Sorting Order'
@@ -184,7 +204,40 @@
 @push('scripts')
 <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
 
+
 <script>
+        const nameInput = document.getElementById('motorcycleName');
+    const slugInput = document.getElementById('motorcycleSlug');
+
+    let slugManuallyEdited = false;
+
+    function slugify(text) {
+        return text
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')     // spaces → hyphen
+            .replace(/[^\w\-]+/g, '') // special chars remove
+            .replace(/\-\-+/g, '-');  // multiple hyphens fix
+    }
+
+    nameInput.addEventListener('input', function () {
+        if (!slugManuallyEdited) {
+            slugInput.value = slugify(this.value);
+        }
+    });
+
+    slugInput.addEventListener('input', function () {
+        slugManuallyEdited = true;
+        this.value = slugify(this.value);
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (nameInput.value && !slugInput.value) {
+            slugInput.value = slugify(nameInput.value);
+        }
+    });
+
+
     // CKEditor
     ClassicEditor
         .create(document.querySelector('#description'))
@@ -224,5 +277,6 @@
     height: 300px;
     overflow-y: auto;
 }
+ 
 
 </style>

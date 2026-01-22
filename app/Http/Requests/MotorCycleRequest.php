@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MotorCycleRequest extends FormRequest
 {
@@ -24,6 +25,12 @@ class MotorCycleRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:50',
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('motorcycles', 'slug')->ignore($this->motorcycle)
+            ],
             'quantity' => 'nullable|integer|min:0',
             'sort_order' => 'nullable|integer|min:0',
             'brand_id' => 'nullable|integer',

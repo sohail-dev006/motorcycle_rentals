@@ -50,6 +50,17 @@
                            value="{{ old('name', $motorcycle->name) }}">
                 </div>
 
+
+
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label class="form-label">Slug *</label>
+                    <input type="text"
+                           name="slug"
+                           id="motorcycleSlug"
+                           class="form-control"
+                           value="{{ old('slug', $motorcycle->slug) }}">
+                </div>
+
                 {{-- CODE --}}
                 <div class="col-12 col-sm-6 col-lg-3">
                     <label class="form-label">Code</label>

@@ -10,14 +10,23 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MotorcycleBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserPermissionController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TourBookingController;
 
+Route::middleware('guest')->group(function () {
+    Route::get('/', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+
+    Route::post('/', [AuthenticatedSessionController::class, 'store'])
+        ->name('login.store');
+});
+
 Route::middleware(['auth'])->group(function () {
+  // Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
+  // Route::post('/', [AuthenticatedSessionController::class, 'store'])->name('login.store');
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-
 });
 
 Route::middleware('auth')->group(function () {
@@ -70,6 +79,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/tours/{tour}', [TourController::class, 'update'])->name('tours.update');
     Route::get('/tours/{tour}', [TourController::class, 'show'])->name('tours.show');
     Route::delete('/tours/{tour}', [TourController::class, 'destroy'])->name('tours.destroy');
+    Route::post('/tours/import', [TourController::class, 'import'])->name('tours.import');
+
 
 
     // Customers 
@@ -113,8 +124,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
 
-});
+    // Calendar
+    Route::get('/calendar', [EventController::class,'index'])->name('calendar.index');
+    Route::get('/calendar/fetch', [EventController::class,'fetch'])->name('calendar.fetch');
 
+    Route::post('/calendar/store', [EventController::class,'store'])->name('calendar.store');
+    Route::put('calendar/update/{id}', [EventController::class, 'update'])->name('calendar.update');
+    Route::delete('/calendar/delete/{event}', [EventController::class,'destroy']);
+    Route::post('/calendar/drag/{event}', [EventController::class,'dragUpdate']);
+
+
+});
 
 Route::middleware(['auth'])
     ->prefix('admin')
@@ -142,16 +162,6 @@ Route::middleware(['auth'])
 
 });
 
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/calendar', [EventController::class,'index'])->name('calendar.index');
-    Route::get('/calendar/fetch', [EventController::class,'fetch'])->name('calendar.fetch');
-
-    Route::post('/calendar/store', [EventController::class,'store'])->name('calendar.store');
-    Route::put('calendar/update/{id}', [EventController::class, 'update'])->name('calendar.update');
-    Route::delete('/calendar/delete/{event}', [EventController::class,'destroy']);
-    Route::post('/calendar/drag/{event}', [EventController::class,'dragUpdate']);
-});
 
 
 

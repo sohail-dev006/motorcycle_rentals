@@ -26,6 +26,26 @@
         </div>
 
         <div class="mb-2">
+            {{-- <form id="importForm"
+      action="{{ route('motorcycles.import') }}"
+      method="POST"
+      enctype="multipart/form-data">
+    @csrf
+
+    <input type="file"
+           name="file"
+           id="csvFileInput"
+           accept=".csv"
+           style="display:none">
+
+    <button type="button"
+            class="btn btn-warning text-white"
+            onclick="openFilePicker()">
+        <i class="bi bi-upload"></i> Import CSV
+    </button>
+</form> --}}
+
+
             <form action="{{ route('motorcycles.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="d-flex gap-2 align-items-center">
@@ -151,7 +171,7 @@
 
         {{-- Pagination --}}
         <div class="mt-3">
-            {{ $motorcycles->links() }}
+            {{-- {{ $motorcycles->links() }} --}}
         </div>
 
     </div>
@@ -168,4 +188,17 @@ setTimeout(function () {
         setTimeout(() => alert.remove(), 500);
     }
 }, 3000);
+
+function openFilePicker() {
+    document.getElementById('csvFileInput').click();
+}
+
+document.getElementById('csvFileInput').addEventListener('change', function () {
+    if (this.files.length > 0) {
+        document.getElementById('importForm').submit();
+    }
+});
+
+
+
 </script>

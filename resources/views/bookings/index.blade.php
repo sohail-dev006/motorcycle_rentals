@@ -6,7 +6,10 @@
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4 class="fw-bold mb-0">Motorcycle Bookings</h4>
+    <div>
+        <h4 class="fw-bold mb-0">Motorcycle Bookings</h4>
+        <small class="text-muted">Manage your Bookings</small>
+    </div>
     <a href="{{ route('bookings.create') }}" class="btn btn-warning rounded-pill">
         <i class="fa fa-plus me-1"></i> Add Booking
     </a>
@@ -24,7 +27,8 @@
 </div>
 
 <div class="card shadow-sm border-0">
-    <div class="table-responsive">
+    {{-- Desktop Table --}}
+    <div class="table-responsive d-none d-md-block">
         <table class="table table-bordered align-middle mb-0" id="bookingsTable">
             <thead class="table-light">
                 <tr>
@@ -72,6 +76,40 @@
             </tbody>
         </table>
     </div>
+
+    {{-- Mobile Cards --}}
+    <div class="d-md-none">
+        @forelse($bookings as $booking)
+        <div class="card mb-3 shadow-sm border">
+            <div class="card-body">
+                <h6 class="fw-bold mb-2">#{{ $booking->id }} - {{ $booking->customer->first_name }} {{ $booking->customer->last_name }}</h6>
+                <p class="mb-1"><strong>Motorcycle:</strong> {{ $booking->motorcycle->name }}</p>
+                <p class="mb-1"><strong>Add-ons:</strong> 
+                    @if($booking->addons)
+                        {{ implode(', ', $booking->addons) }}
+                    @else
+                        <span class="text-muted">—</span>
+                    @endif
+                </p>
+                <p class="mb-1"><strong>Pick / Drop:</strong> {{ $booking->pick_date->format('d-m-Y') }} {{ $booking->pick_time }} <br> {{ $booking->drop_date->format('d-m-Y') }} {{ $booking->drop_time }}</p>
+                <p class="mb-1"><strong>Status:</strong> {{ ucfirst($booking->status) }}</p>
+                <div class="d-flex gap-1 mt-2 flex-wrap">
+                    <a href="{{ route('bookings.show',$booking) }}" class="btn btn-sm btn-outline-secondary flex-grow-1"><i class="fa fa-eye"></i> View</a>
+                    <a href="{{ route('bookings.edit',$booking) }}" class="btn btn-sm btn-outline-primary flex-grow-1"><i class="fa fa-pen"></i> Edit</a>
+                    <form method="POST" action="{{ route('bookings.destroy',$booking) }}" class="flex-grow-1">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm btn-outline-danger w-100" onclick="return confirm('Delete this booking?')">
+                            <i class="fa fa-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @empty
+        <p class="text-center text-muted py-4">No bookings found</p>
+        @endforelse
+    </div>
 </div>
 
 <div class="mt-3">
@@ -85,23 +123,26 @@
 const searchInput = document.getElementById('searchInput');
 searchInput.addEventListener('input', function() {
     const filter = this.value.toLowerCase();
+
+    // Desktop rows
     const rows = document.querySelectorAll('#bookingsTable tbody tr');
-
     rows.forEach(row => {
-        const customer = row.cells[1].textContent.toLowerCase();
-        const motorcycle = row.cells[2].textContent.toLowerCase();
+        const customer = row.cells[1]?.textContent.toLowerCase() || '';
+        const motorcycle = row.cells[2]?.textContent.toLowerCase() || '';
+        row.style.display = (customer.includes(filter) || motorcycle.includes(filter)) ? '' : 'none';
+    });
 
-        if(customer.includes(filter) || motorcycle.includes(filter)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
+    // Mobile cards
+    const cards = document.querySelectorAll('.d-md-none .card');
+    cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(filter) ? '' : 'none';
     });
 });
 
-    setTimeout(() => {
-        const alert = document.getElementById('successAlert');
-        if (alert) alert.remove();
-    }, 3000);
+setTimeout(() => {
+    const alert = document.getElementById('successAlert');
+    if (alert) alert.remove();
+}, 3000);
 </script>
 @endpush

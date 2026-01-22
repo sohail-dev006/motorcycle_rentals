@@ -5,157 +5,152 @@
 
 @section('content')
 
-{{-- TOP STATS --}}
-<div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Total Tour Bookings</small>
-            <h3 class="fw-bold text-center fs-2 pt-2">{{ $totalTourBookings }}</h3>
+{{-- ===== STATS CARDS ===== --}}
+<div class="row g-4 mb-4">
+
+    @php
+        $stats = [
+            ['title'=>'Total Bookings','value'=>$totalTourBookings,'icon'=>'fa-calendar-check','color'=>'primary'],
+            ['title'=>'Approved','value'=>$approvedBookings,'icon'=>'fa-check-circle','color'=>'success'],
+            ['title'=>'Pending','value'=>$pendingBookings,'icon'=>'fa-clock','color'=>'warning'],
+            ['title'=>'Cancelled','value'=>$cancelledBookings,'icon'=>'fa-times-circle','color'=>'danger'],
+            ['title'=>'Due Today','value'=>$dueBookings,'icon'=>'fa-bell','color'=>'info'],
+            ['title'=>'Customers','value'=>$customers,'icon'=>'fa-users','color'=>'secondary'],
+        ];
+    @endphp
+
+    @foreach($stats as $stat)
+    <div class="col-12 col-sm-6 col-xl-2">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="icon-box bg-{{ $stat['color'] }}">
+                    <i class="fa {{ $stat['icon'] }}"></i>
+                </div>
+                <div class="ms-3">
+                    <small class="text-muted">{{ $stat['title'] }}</small>
+                    <h5 class="fw-bold mb-0">{{ $stat['value'] }}</h5>
+                </div>
+            </div>
         </div>
     </div>
+    @endforeach
 
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Approved Bookings</small>
-            <h3 class="fw-bold text-center fs-2 pt-2 text-success">{{ $approvedBookings }}</h3>
+</div>
+
+{{-- ===== MOTORCYCLES ===== --}}
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <small class="text-muted">Total Motorcycles</small>
+                <h4 class="fw-bold">{{ $totalMotorcycles }}</h4>
+            </div>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Pending Bookings</small>
-            <h3 class="fw-bold text-center fs-2 pt-2 text-warning">{{ $pendingBookings }}</h3>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <small class="text-muted">Available</small>
+                <h4 class="fw-bold text-success">{{ $availableMotorcycles }}</h4>
+            </div>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Cancelled Bookings</small>
-            <h3 class="fw-bold text-center fs-2 pt-2 text-danger">{{ $cancelledBookings }}</h3>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Due Bookings Today</small>
-            <h3 class="fw-bold text-center fs-2 pt-2 text-info">{{ $dueBookings }}</h3>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Customers</small>
-            <h3 class="fw-bold text-center fs-2 pt-2">{{ $customers }}</h3>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <small class="text-muted">Booked</small>
+                <h4 class="fw-bold text-danger">{{ $bookedMotorcycles }}</h4>
+            </div>
         </div>
     </div>
 </div>
 
-{{-- MOTORCYCLES --}}
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Total Motorcycles</small>
-            <h3 class="fw-bold text-center fs-2 pt-2">{{ $totalMotorcycles }}</h3>
+{{-- ===== PICK / DROP ===== --}}
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <small class="text-muted">Today Pickups</small>
+                <h4 class="fw-bold">{{ $todayPickups }}</h4>
+            </div>
         </div>
     </div>
-
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Available Motorcycles</small>
-            <h3 class="fw-bold text-center fs-2 pt-2 text-success">{{ $availableMotorcycles }}</h3>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Booked Motorcycles</small>
-            <h3 class="fw-bold text-center fs-2 pt-2 text-danger">{{ $bookedMotorcycles }}</h3>
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <small class="text-muted">Today Drops</small>
+                <h4 class="fw-bold">{{ $todayDrops }}</h4>
+            </div>
         </div>
     </div>
 </div>
 
-{{-- TODAY PICK / DROP --}}
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Today Pickups</small>
-            <h3 class="fw-bold text-center fs-2 pt-2">{{ $todayPickups }}</h3>
+{{-- ===== CHARTS ===== --}}
+<div class="row g-4 mb-4">
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">Booking Status</h6>
+                <canvas id="bookingChart"></canvas>
+            </div>
         </div>
     </div>
-
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3">
-            <small class="fs-5 text-center">Today Drops</small>
-            <h3 class="fw-bold text-center fs-2 pt-2">{{ $todayDrops }}</h3>
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">Bookings Bar</h6>
+                <canvas id="bookingBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">Booking Trend</h6>
+                <canvas id="bookingLineChart"></canvas>
+            </div>
         </div>
     </div>
 </div>
-<div class="row">
-        {{-- CHART --}}
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 mb-4">
-            <h6 class="fw-bold mb-3">Approved vs Pending vs Cancelled Bookings</h6>
-            <canvas id="bookingChart" height="120"></canvas>
-        </div>
-    </div>
-    {{-- BAR CHART --}}
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 mb-4" style="height: 350px;">
-            <h6 class="fw-bold mb-3">Bookings Overview (Bar Chart)</h6>
-            <canvas id="bookingBarChart"></canvas>
-        </div>
-    </div>
-    {{-- LINE CHART --}}
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 mb-4" style="height: 350px;">
-            <h6 class="fw-bold mb-3">Bookings Trend (Line Chart)</h6>
-            <canvas id="bookingLineChart"></canvas>
-        </div>
 
-    </div>
-</div>
-
-
-
-{{-- RECENT BOOKINGS --}}
-<div class="card shadow-sm">
+{{-- ===== RECENT BOOKINGS ===== --}}
+<div class="card shadow-sm border-0">
     <div class="card-header bg-white fw-bold">
-        Recent Tour Bookings
+        Recent Bookings
     </div>
 
     <div class="table-responsive">
-        <table class="table mb-0 align-middle">
+        <table class="table align-middle mb-0">
             <thead class="table-light">
                 <tr>
                     <th>Customer</th>
                     <th>Tour</th>
                     <th>Motorcycle</th>
                     <th>Pick Date</th>
-                    <th>Total Price</th>
+                    <th>Total</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($recentBookings as $booking)
                 <tr>
-                    <td>{{ $booking->customer->first_name ?? '—' }} {{ $booking->customer->last_name ?? '' }}</td>
+                    <td>{{ $booking->customer->first_name ?? '—' }}</td>
                     <td>{{ $booking->tour->name ?? '—' }}</td>
                     <td>{{ $booking->motorcycle->name ?? '—' }}</td>
                     <td>{{ \Carbon\Carbon::parse($booking->pick_date)->format('d M Y') }}</td>
                     <td>AED {{ number_format($booking->total_price ?? 0,2) }}</td>
                     <td>
-                        @if($booking->status == 'approved')
-                            <span class="badge bg-success">Approved</span>
-                        @elseif($booking->status == 'pending')
-                            <span class="badge bg-warning">Pending</span>
-                        @else
-                            <span class="badge bg-danger">Cancelled</span>
-                        @endif
+                        <span class="badge bg-{{ 
+                            $booking->status == 'approved' ? 'success' : 
+                            ($booking->status == 'pending' ? 'warning' : 'danger') 
+                        }}">
+                            {{ ucfirst($booking->status) }}
+                        </span>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center text-muted">No bookings found</td>
+                    <td colspan="6" class="text-center text-muted">No data</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -164,6 +159,7 @@
 </div>
 
 @endsection
+
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -194,23 +190,23 @@ new Chart(document.getElementById('bookingBarChart'), {
             borderWidth: 1
         }]
     },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    stepSize: 1 
-                }
-            }
-        },
-        plugins: {
-            legend: {
-                display: false 
-            }
-        }
-    }
+    // options: {
+    //     responsive: true,
+    //     maintainAspectRatio: false,
+    //     scales: {
+    //         y: {
+    //             beginAtZero: true,
+    //             ticks: {
+    //                 stepSize: 1 
+    //             }
+    //         }
+    //     },
+    //     plugins: {
+    //         legend: {
+    //             display: false 
+    //         }
+    //     }
+    // }
 });
 new Chart(document.getElementById('bookingLineChart'), {
     type: 'line',
@@ -229,26 +225,44 @@ new Chart(document.getElementById('bookingLineChart'), {
             }
         ]
     },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    stepSize: 1
-                }
-            }
-        },
-        plugins: {
-            legend: {
-                display: true
-            },
-            tooltip: {
-                enabled: true
-            }
-        }
-    }
+    // options: {
+    //     responsive: true,
+    //     maintainAspectRatio: false,
+    //     scales: {
+    //         y: {
+    //             beginAtZero: true,
+    //             ticks: {
+    //                 stepSize: 1
+    //             }
+    //         }
+    //     },
+    //     plugins: {
+    //         legend: {
+    //             display: true
+    //         },
+    //         tooltip: {
+    //             enabled: true
+    //         }
+    //     }
+    // }
 });
 </script>
 @endpush
+<style>
+.stat-card {
+    transition: all .3s ease;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+.icon-box {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+}
+</style>

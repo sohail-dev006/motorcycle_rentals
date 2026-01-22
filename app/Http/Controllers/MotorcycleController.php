@@ -32,6 +32,8 @@ class MotorcycleController extends Controller
         $motorcycles = $query->paginate(10)->withQueryString();
         return view('motorcycles.index', compact('motorcycles'));
     }
+
+
     public function import(Request $request)
     {
         $user = auth()->user();
@@ -121,14 +123,31 @@ class MotorcycleController extends Controller
         return view('motorcycles.create', compact('brands'));
     }
 
+
+
+    private function generateUniqueSlug($slug)
+    {
+        $slug = Str::slug($slug);
+        $original = $slug;
+        $i = 1;
+
+        while (Motorcycle::where('slug', $slug)->exists()) {
+            $slug = $original . '-' . $i;
+            $i++;
+        }
+
+        return $slug;
+    }
+
     public function store(MotorCycleRequest $request)
     {
         $data = $request->validated();
 
-        $data['slug'] = Str::slug($request->name) . '-' . uniqid();
+        $data['slug'] = $this->generateUniqueSlug(
+            $data['slug'] ?? $data['name']
+        );
+
         $data['price'] = ($data['base_price'] ?? 0) + ($data['extra_price'] ?? 0);
-
-
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('motorcycles', 'public');
@@ -136,10 +155,11 @@ class MotorcycleController extends Controller
 
         Motorcycle::create($data);
 
-        return redirect()
-            ->route('motorcycles.index')
+        return redirect()->route('motorcycles.index')
             ->with('success', 'Motorcycle added successfully');
     }
+
+
 
     public function show(Motorcycle $motorcycle)
     {
@@ -167,19 +187,23 @@ class MotorcycleController extends Controller
     {
         $data = $request->validated();
 
+        if ($motorcycle->slug !== $data['slug']) {
+            $data['slug'] = $this->generateUniqueSlug($data['slug']);
+        }
+
+        $data['price'] = ($data['base_price'] ?? 0) + ($data['extra_price'] ?? 0);
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('motorcycles', 'public');
         }
-        $data['price'] = ($data['base_price'] ?? 0) + ($data['extra_price'] ?? 0);
-
-
 
         $motorcycle->update($data);
 
-        return redirect()
-            ->route('motorcycles.index')
+        return redirect()->route('motorcycles.index')
             ->with('success', 'Motorcycle updated successfully');
     }
+
+
 
     public function destroy(Motorcycle $motorcycle)
     {

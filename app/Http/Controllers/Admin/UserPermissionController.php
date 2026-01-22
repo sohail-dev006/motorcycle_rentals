@@ -64,9 +64,9 @@ class UserPermissionController extends Controller
 
     public function edit(User $user)
     {
-        $user = auth()->user();
+        $auth = auth()->user();
 
-        if (!($user->hasRole('Super Admin') || $user->can('edit-user'))) {
+        if (!($auth->hasRole('Super Admin') || $auth->can('edit-user'))) {
             abort(403, 'Unauthorized action.');
         }
         return view('admin.users.edit', [

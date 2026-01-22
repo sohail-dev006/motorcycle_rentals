@@ -25,10 +25,19 @@
             </a>
         </div>
         <div class="mb-2">
-            <a href="" class="btn btn-warning text-white">
-                <i class="bi bi-plus-circle"></i> Import CSV File
-            </a>
+            <form action="{{ route('tours.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="">
+                        <input type="file" name="file" class="form-control" accept=".csv" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning text-white">
+                        <i class="bi bi-upload"></i> Import CSV
+                    </button>
+                </div>
+            </form>
         </div>
+
 
         {{-- Search --}}
         <form method="GET" class="mb-3 d-flex gap-2">
@@ -176,7 +185,7 @@
         {{-- Pagination --}}
        
         <div class="mt-3">
-            {{ $tours->links() }}
+            {{-- {{ $tours->links() }} --}}
         </div>
 
     </div>
