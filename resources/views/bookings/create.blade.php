@@ -29,7 +29,7 @@
                 <option value="">Select Motorcycle</option>
                 @foreach($motorcycles as $motorcycle)
                     <option value="{{ $motorcycle->id }}"
-                        data-price="{{ $motorcycle->price_per_day }}">
+                        data-price="{{ $motorcycle->price }}"> <!-- Correct price -->
                         {{ $motorcycle->name }}
                     </option>
                 @endforeach
@@ -42,8 +42,10 @@
             <div class="d-flex gap-2 flex-wrap">
                 @foreach($addons as $addon)
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="addons[]" value="{{ $addon->name }}" id="addon{{ $addon->id }}"
-                        {{ in_array($addon->name, $booking->addons ?? []) ? 'checked' : '' }}>
+                        <input class="form-check-input addon" type="checkbox" name="addons[]" 
+                               value="{{ $addon->name }}" 
+                               id="addon{{ $addon->id }}"
+                               data-price="{{ $addon->price ?? 0 }}">
                         <label class="form-check-label" for="addon{{ $addon->id }}">{{ $addon->name }}</label>
                     </div>
                 @endforeach
@@ -87,6 +89,7 @@
         <hr>
         <h6>Booking Summary</h6>
         <p>Days: <strong id="days">0</strong></p>
+        <p>Motorcycle Price: <strong id="bike_price">0</strong></p>
         <p>Subtotal: <strong id="subtotal">0.00</strong> AED</p>
         <p>VAT (5%): <strong id="vat">0.00</strong> AED</p>
         <p>Total: <strong id="total">0.00</strong> AED</p>
@@ -114,36 +117,40 @@ function calculate() {
     let subtotal = 0;
 
     if (pickDate.value && dropDate.value && pickTime.value && dropTime.value) {
-
         const pick = new Date(pickDate.value + 'T' + pickTime.value);
         const drop = new Date(dropDate.value + 'T' + dropTime.value);
 
+        // console.log('Pick:', pick, 'Drop:', drop); 
 
         const hours = (drop - pick) / (1000 * 60 * 60);
+        // console.log('Hours difference:', hours); 
 
-        // At least 1 day, partial days count as full day
-        days = Math.max(1, Math.ceil(hours / 24));
+        if(hours > 0) {
+            days = Math.max(1, Math.ceil(hours / 24));
+        } else {
+            days = 1; 
+        }
     }
 
-    // Motorcycle price
-    const bikePrice = motorcycle.selectedOptions[0]?.dataset.price || 0;
+    const bikePrice = parseFloat(motorcycle.selectedOptions[0]?.dataset.price) || 0;
     subtotal += bikePrice * days;
 
-    // Addons price
     addons.forEach(a => {
-        if (a.checked) {
-            subtotal += parseFloat(a.dataset.price);
-        }
+        if (a.checked) subtotal += parseFloat(a.dataset.price);
     });
 
     const vat = subtotal * 0.05;
     const total = subtotal + vat;
 
     document.getElementById('days').innerText = days;
+    document.getElementById('bike_price').innerText = bikePrice;
     document.getElementById('subtotal').innerText = subtotal.toFixed(2);
     document.getElementById('vat').innerText = vat.toFixed(2);
     document.getElementById('total').innerText = total.toFixed(2);
+
+    // console.log('Bike price:', bikePrice, 'Days:', days, 'Subtotal:', subtotal, 'VAT:', vat, 'Total:', total);
 }
+
 
 // Event listeners
 [motorcycle, pickDate, dropDate, pickTime, dropTime].forEach(e => e.addEventListener('change', calculate));

@@ -9,43 +9,43 @@
 <div class="row g-3 mb-4">
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Total Tour Bookings</small>
-            <h3 class="fw-bold">{{ $totalTourBookings }}</h3>
+            <small class="fs-5 text-center">Total Tour Bookings</small>
+            <h3 class="fw-bold text-center fs-2 pt-2">{{ $totalTourBookings }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Approved Bookings</small>
-            <h3 class="fw-bold text-success">{{ $approvedBookings }}</h3>
+            <small class="fs-5 text-center">Approved Bookings</small>
+            <h3 class="fw-bold text-center fs-2 pt-2 text-success">{{ $approvedBookings }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Pending Bookings</small>
-            <h3 class="fw-bold text-warning">{{ $pendingBookings }}</h3>
+            <small class="fs-5 text-center">Pending Bookings</small>
+            <h3 class="fw-bold text-center fs-2 pt-2 text-warning">{{ $pendingBookings }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Cancelled Bookings</small>
-            <h3 class="fw-bold text-danger">{{ $cancelledBookings }}</h3>
+            <small class="fs-5 text-center">Cancelled Bookings</small>
+            <h3 class="fw-bold text-center fs-2 pt-2 text-danger">{{ $cancelledBookings }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Due Bookings Today</small>
-            <h3 class="fw-bold text-info">{{ $dueBookings }}</h3>
+            <small class="fs-5 text-center">Due Bookings Today</small>
+            <h3 class="fw-bold text-center fs-2 pt-2 text-info">{{ $dueBookings }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card shadow-sm p-3">
-            <small>Customers</small>
-            <h3 class="fw-bold">{{ $customers }}</h3>
+            <small class="fs-5 text-center">Customers</small>
+            <h3 class="fw-bold text-center fs-2 pt-2">{{ $customers }}</h3>
         </div>
     </div>
 </div>
@@ -54,22 +54,22 @@
 <div class="row g-3 mb-4">
     <div class="col-md-4">
         <div class="card shadow-sm p-3">
-            <small>Total Motorcycles</small>
-            <h3 class="fw-bold">{{ $totalMotorcycles }}</h3>
+            <small class="fs-5 text-center">Total Motorcycles</small>
+            <h3 class="fw-bold text-center fs-2 pt-2">{{ $totalMotorcycles }}</h3>
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="card shadow-sm p-3">
-            <small>Available Motorcycles</small>
-            <h3 class="fw-bold text-success">{{ $availableMotorcycles }}</h3>
+            <small class="fs-5 text-center">Available Motorcycles</small>
+            <h3 class="fw-bold text-center fs-2 pt-2 text-success">{{ $availableMotorcycles }}</h3>
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="card shadow-sm p-3">
-            <small>Booked Motorcycles</small>
-            <h3 class="fw-bold text-danger">{{ $bookedMotorcycles }}</h3>
+            <small class="fs-5 text-center">Booked Motorcycles</small>
+            <h3 class="fw-bold text-center fs-2 pt-2 text-danger">{{ $bookedMotorcycles }}</h3>
         </div>
     </div>
 </div>
@@ -78,15 +78,15 @@
 <div class="row g-3 mb-4">
     <div class="col-md-4">
         <div class="card shadow-sm p-3">
-            <small>Today Pickups</small>
-            <h3 class="fw-bold">{{ $todayPickups }}</h3>
+            <small class="fs-5 text-center">Today Pickups</small>
+            <h3 class="fw-bold text-center fs-2 pt-2">{{ $todayPickups }}</h3>
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="card shadow-sm p-3">
-            <small>Today Drops</small>
-            <h3 class="fw-bold">{{ $todayDrops }}</h3>
+            <small class="fs-5 text-center">Today Drops</small>
+            <h3 class="fw-bold text-center fs-2 pt-2">{{ $todayDrops }}</h3>
         </div>
     </div>
 </div>

@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TourRequest;
 use App\Models\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -44,17 +45,9 @@ class TourController extends Controller
         return view('tours.create');
     }
 
-    public function store(Request $request)
+    public function store(TourRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|in:featured,unfeatured',
-            'group_price' => 'required|numeric|min:0',
-            'private_price' => 'required|numeric|min:0',
-            'passenger_price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
-        ]);
+        $data = $request->validated();
 
         $data['slug'] = Str::slug($request->name) . '-' . uniqid();
 
@@ -77,17 +70,9 @@ class TourController extends Controller
         return view('tours.edit', compact('tour'));
     }
 
-    public function update(Request $request, Tour $tour)
+    public function update(TourRequest $request, Tour $tour)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|in:featured,unfeatured',
-            'group_price' => 'required|numeric|min:0',
-            'private_price' => 'required|numeric|min:0',
-            'passenger_price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
-        ]);
+        $data = $request->validated();
 
         $data['slug'] = Str::slug($request->name) . '-' . uniqid();
 

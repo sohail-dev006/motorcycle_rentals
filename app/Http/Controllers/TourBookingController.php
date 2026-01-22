@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TourBookingRequest;
 use App\Models\TourBooking;
 use App\Models\Customer;
 use App\Models\Tour;
@@ -34,19 +35,9 @@ class TourBookingController extends Controller
         return view('tour-bookings.create', compact('tours','motorcycles','customers'));
     }
 
-    public function store(Request $request)
+    public function store(TourBookingRequest $request)
     {
-        $data = $request->validate([
-            'customer_id'=>'required|exists:customers,id',
-            'tour_id'=>'required|exists:tours,id',
-            'motorcycle_id'=>'nullable|exists:motorcycles,id',
-            'pick_date'=>'required|date',
-            'status'=>'required|in:pending,approved,cancelled',
-            'group_price'=>'nullable|numeric|min:0',
-            'private_price'=>'nullable|numeric|min:0',
-            'passenger_price'=>'required|numeric|min:0',
-            'description'=>'nullable|string',
-        ]);
+        $data = $request->validated();
 
         // Validation: Only one of group_price or private_price can be > 0
         if (($data['group_price'] ?? 0) > 0 && ($data['private_price'] ?? 0) > 0) {
@@ -88,19 +79,9 @@ class TourBookingController extends Controller
         return view('tour-bookings.edit', compact('tourBooking','tours','motorcycles','customers'));
     }
 
-    public function update(Request $request, TourBooking $tourBooking)
+    public function update(TourBookingRequest $request, TourBooking $tourBooking)
     {
-        $data = $request->validate([
-            'customer_id'=>'required|exists:customers,id',
-            'tour_id'=>'required|exists:tours,id',
-            'motorcycle_id'=>'nullable|exists:motorcycles,id',
-            'pick_date'=>'required|date',
-            'status'=>'required|in:pending,approved,cancelled',
-            'group_price'=>'nullable|numeric|min:0',
-            'private_price'=>'nullable|numeric|min:0',
-            'passenger_price'=>'required|numeric|min:0',
-            'description'=>'nullable|string',
-        ]);
+        $data = $request->validated();
 
         if (($data['group_price'] ?? 0) > 0 && ($data['private_price'] ?? 0) > 0) {
             return back()->withInput()->withErrors([

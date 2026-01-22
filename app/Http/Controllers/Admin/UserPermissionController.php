@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserPermissionRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -44,15 +45,9 @@ class UserPermissionController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(UserPermissionRequest $request)
     {
-        $request->validate([
-            'name'=>'required',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|min:6',
-            'role'=>'required',
-            'status'=>'required|in:active,inactive',
-        ]);
+        $request->validated();
 
         $user = User::create([
             'name'=>$request->name,

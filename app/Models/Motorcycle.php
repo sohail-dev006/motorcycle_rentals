@@ -21,6 +21,7 @@ class Motorcycle extends Model
         'visibility',
         'base_price', 
         'extra_price', 
+        'price',
         'description', 
         'image',
     ];

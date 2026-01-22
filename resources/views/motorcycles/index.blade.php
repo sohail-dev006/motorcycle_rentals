@@ -76,7 +76,13 @@
                             <td>
                                 <span class="badge bg-success">{{ ucfirst($m->status) }}</span>
                             </td>
-                            <td>AED {{ number_format($m->price, 2) }}</td>
+                            <td>
+                                {{-- @php
+                                    logger('Motorcycle ID: ' . $m->id . ', base: ' . $m->base_price . ', extra: ' . $m->extra_price . ', saved price: ' . $m->price);
+                                @endphp --}}
+                                AED {{ number_format($m->price, 2) }}
+                            </td>
+
                             <td class="text-center">
                                 <a href="{{ route('motorcycles.show', $m->id) }}" class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-eye"></i>

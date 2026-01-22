@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddOnRequest;
 use App\Models\AddOn;
 use Illuminate\Http\Request;
 use Illuminate\Container\Attributes\Storage;
@@ -36,14 +37,9 @@ class AddOnController extends Controller
         }
         return view('add.create', );
     }
-    public function store(Request $request)
+    public function store(AddOnRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+        $request->validated();
 
         $data = $request->all();
 
@@ -69,14 +65,9 @@ class AddOnController extends Controller
         ]);
     }
 
-    public function update(Request $request, AddOn $add)
+    public function update(AddOnRequest $request, AddOn $add)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+        $request->validated();
 
         $data = $request->only(['name', 'price', 'description']);
 

@@ -56,7 +56,7 @@ class DashboardController extends Controller
             ->whereIn('status',['approved','pending'])
             ->count();
 
-        // RECENT BOOKINGS (latest 5)
+        // RECENT BOOKINGS 
         $recentBookings = TourBooking::with(['motorcycle','customer','tour'])
             ->latest()
             ->take(5)

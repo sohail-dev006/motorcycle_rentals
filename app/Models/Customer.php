@@ -12,7 +12,7 @@ class Customer extends Model
 
     protected $fillable = [
 
-        /* PERSONAL INFORMATION */
+        //  PERSONAL INFORMATION 
         'first_name',
         'last_name',
         'dob',
@@ -23,7 +23,7 @@ class Customer extends Model
         'country',
         'permanent_address',
 
-        /* VISITOR ADDRESS */
+        //  VISITOR ADDRESS 
         'hotel_name',
         'room_no',
         'visitor_city',
@@ -31,32 +31,32 @@ class Customer extends Model
         'uae_address',
         'uae_city',             
 
-        /* PASSPORT / ID */
+        //  PASSPORT / ID 
         'nationality',
         'passport_no',
         'passport_expiry',
         'age',
 
-        /* EMERGENCY */
+        //  EMERGENCY 
         'emergency_name',
         'emergency_relation',
         'emergency_city',
         'emergency_phone',
         'emergency_address',
 
-        /* LICENSE */
+        //  LICENSE 
         'license_no',
         'license_country',
         'license_expiry',
         'international_license_no',
 
-        /* PAYMENT */
+        //  PAYMENT 
         'card_type',
         'card_number',          
         'card_last_four',
         'card_expiry',
 
-        /* IMAGE */
+        //  IMAGE 
         'image'
     ];
 

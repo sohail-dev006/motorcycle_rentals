@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MotorCycleRequest;
 use App\Models\Motorcycle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -94,7 +95,7 @@ class MotorcycleController extends Controller
                     'code' => $data['code'] ?? null,
                     'sort_order' => $data['sort_order'] ?? 0,
                     'status' => $data['status'] ?? 'active',
-                    'price' => $data['price'] ?? 0,
+                    'price' => ($data['base_price'] ?? 0) + ($data['extra_price'] ?? 0),
                     'slug' => $slug,
                     'image' => $imagePath,
                 ]);
@@ -120,23 +121,14 @@ class MotorcycleController extends Controller
         return view('motorcycles.create', compact('brands'));
     }
 
-    public function store(Request $request)
+    public function store(MotorCycleRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50',
-            'quantity' => 'nullable|integer|min:0',
-            'sort_order' => 'nullable|integer|min:0',
-            'brand_id' => 'nullable|integer',
-            'status' => 'required|in:featured,unfeatured',
-            'visibility' => 'required|in:show,hide',
-            'base_price' => 'required|numeric|min:0',
-            'extra_price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
-        ]);
+        $data = $request->validated();
 
         $data['slug'] = Str::slug($request->name) . '-' . uniqid();
+        $data['price'] = ($data['base_price'] ?? 0) + ($data['extra_price'] ?? 0);
+
+
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('motorcycles', 'public');
@@ -171,25 +163,16 @@ class MotorcycleController extends Controller
         return view('motorcycles.edit', compact('motorcycle', 'brands'));
     }
 
-    public function update(Request $request, Motorcycle $motorcycle)
+    public function update(MotorCycleRequest $request, Motorcycle $motorcycle)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50',
-            'quantity' => 'nullable|integer|min:0',
-            'sort_order' => 'nullable|integer|min:0',
-            'brand_id' => 'nullable|exists:brands,id',
-            'status' => 'required|in:featured,unfeatured',
-            'visibility' => 'required|in:show,hide',
-            'base_price' => 'required|numeric|min:0',
-            'extra_price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('motorcycles', 'public');
         }
+        $data['price'] = ($data['base_price'] ?? 0) + ($data['extra_price'] ?? 0);
+
+
 
         $motorcycle->update($data);
 
