@@ -442,7 +442,9 @@ updateIcon();
     padding: 10px 14px;
     color: var(--bs-body-color);
 }
-
+.offcanvas-header{
+    padding: 5px 20px;
+}
 .nav-link.active {
     background: #facc15;
     color: #000 !important;
